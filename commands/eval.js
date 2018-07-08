@@ -20,3 +20,5 @@ exports.run = (client, message, args) => {
 				message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
 			}
 }
+
+exp
