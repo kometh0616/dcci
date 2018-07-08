@@ -666,6 +666,7 @@ packages:
     optional: true
     requiresBuild: true
     resolution:
+      registry: 'https://registry.npmjs.org/'
       tarball: 'https://codeload.github.com/discordapp/erlpack/tar.gz/674ebfd3439ba4b7ce616709821d27630f7cdc61'
     version: 0.1.0
 registry: 'https://registry.npmjs.org/'

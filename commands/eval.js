@@ -1,5 +1,5 @@
 exports.run = (client, message, args) => {
-  if (message.author.id !== "209635318503047168") return;
+  if (message.author.id !== client.config.botOwnerID) return;
   const argument = message.content.split(" ").slice(1);
 	const clean = text => {
   	if (typeof(text) === "string")
@@ -7,7 +7,6 @@ exports.run = (client, message, args) => {
   	else
    		return text;
 		}
-		if (message.author.id !== "209635318503047168") return;
 		try {
 			const code = argument.join(" ");
 			let evaled = eval(code);
@@ -21,4 +20,9 @@ exports.run = (client, message, args) => {
 			}
 }
 
-exp
+exports.help = {
+  name: 'eval',
+  description: 'Evaluates a code. Can only be ran by a bot developer.',
+  subcommands: 'none',
+  usage: './eval <code>'
+}
