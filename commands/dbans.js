@@ -184,8 +184,12 @@ exports.run = async (client, message, args) => {
 		}
 		break;
     case "usercheck":
-      await client.blacklist.update()
-      let idCheck = await client.blacklist.lookup(args[1])
+      let id = args[1];
+      if (message.mentions.users.first()){
+        id = message.mentions.users.first().id
+      }
+      const list = await client.blacklist.update()
+      let idCheck = await list.lookup(id)
       if (idCheck){
         return message.reply('this ID is blacklisted in Discord List Bans!')
       }
