@@ -15,7 +15,7 @@ exports.run = (client, message, args) => {
 	  		let props = require(`./${f}`)
   			namelist = props.help.name
   			desclist = props.help.description
-        helplist.push(`${namelist} - ${desclist}`)
+        helplist.push(`**${namelist}** - ${desclist}`)
 	  		})
 	  })
   message.reply("sent you a list of my commands!")
