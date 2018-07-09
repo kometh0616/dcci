@@ -11,6 +11,8 @@ exports.run = (client, message, args) => {
 		var desclist = ""
 		var sublist = ""
 		var usagelist = ""
+    var message = []
+    if (!args[0]){
 		message.reply(`sending you a DM of my commands!`)
 		message.author.createDM().then(() => {
 			jsfiles.forEach((f, i) => { 
@@ -19,7 +21,7 @@ exports.run = (client, message, args) => {
 				desclist = props.help.description
 				sublist = props.help.subcommands
 				usagelist = props.help.usage
-				message.author.dmChannel.send(`--------------------------------------------------\n**Name: ${namelist}**\n\nDescription: ${desclist}\n\nSubcommands: ${sublist}\n\nUsage: ${usagelist}`)
+        message.push(`${namelist} - ${desclist}`)
 			})
 		})
 	})
