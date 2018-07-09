@@ -25,7 +25,11 @@ exports.run = (client, message, args) => {
 	})
   if (!args[0]){
     message.reply('sending you a DM of my commands!')
-    message.author.dmChannel.send(`Here is a list of my commands and their brief descriptions: \n\n${message, {split: true}}\n\n If you want to find out more on an exact command, do \`./help <command>\n`)
+    message.author.dmChannel.send(`Here is a list of my commands and their brief descriptions: \n\n${message, {split: true}}\n\n If you want to find out more on an exact command, do \`./help <command>\`!`)
+  }
+  else if (args[0]){
+    let command = client.commands.get(args[0]) || client.commands.find(c => c.help.name && c.help.name.includes(args[0]))
+    
   }
 }
 
