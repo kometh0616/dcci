@@ -29,7 +29,14 @@ exports.run = (client, message, args) => {
   }
   else if (args[0]){
     let command = client.commands.get(args[0]) || client.commands.find(c => c.help.name && c.help.name.includes(args[0]))
-    
+    if (!command){
+      return message.channel.send(`That is not a valid command!`)
+    }
+    let precise = []
+    precise.push(`**Name:**${command.help.name}`)
+    if (command.help.description) precise.push(`**Description:** ${command.help.description}`)
+    if (command.help.subcommands) precise.push(`**Subcommands:** ${command.help.subcommands}`)
+    if (command.help.usage) precise.push(`**Usage:** ${command.help.usage}`)
   }
 }
 
