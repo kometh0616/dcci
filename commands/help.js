@@ -12,8 +12,6 @@ exports.run = (client, message, args) => {
 		var sublist = ""
 		var usagelist = ""
     var message = []
-    if (!args[0]){
-		message.reply(`sending you a DM of my commands!`)
 		message.author.createDM().then(() => {
 			jsfiles.forEach((f, i) => { 
 				let props = require(`./${f}`)
@@ -25,6 +23,10 @@ exports.run = (client, message, args) => {
 			})
 		})
 	})
+  if (!args[0]){
+    message.reply('sending you a DM of my commands!')
+    message.author.dmChannel.send(`Here is a list of my commands and their brief descriptions: \n\n${message, {split: true}}\n\n If you want to find out more on an exact command, do \`./help <command>\n`)
+  }
 }
 
 exports.help = {
