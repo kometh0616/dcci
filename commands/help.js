@@ -12,7 +12,6 @@ exports.run = (client, message, args) => {
 		var sublist = ""
 		var usagelist = ""
     var message = []
-		message.author.createDM().then(() => {
 			jsfiles.forEach((f, i) => { 
 				let props = require(`./${f}`)
 				namelist = props.help.name
@@ -21,11 +20,12 @@ exports.run = (client, message, args) => {
 				usagelist = props.help.usage
         message.push(`${namelist} - ${desclist}`)
 			})
-		})
 	})
   if (!args[0]){
     message.reply('sending you a DM of my commands!')
-    message.author.dmChannel.send(`Here is a list of my commands and their brief descriptions: \n\n${message, {split: true}}\n\n If you want to find out more on an exact command, do \`./help <command>\`!`)
+    message.author.createDM().then((dmChannel) => {
+      dmChannel.send(`Here is a list of my commands and their brief descriptions: \n\n${message, {split: true}}\n\n If you want to find out more on an exact command, do \`./help <command>\`!`)
+    })
   }
   else if (args[0]){
     let command = client.commands.get(args[0]) || client.commands.find(c => c.help.name && c.help.name.includes(args[0]))
@@ -33,10 +33,11 @@ exports.run = (client, message, args) => {
       return message.channel.send(`That is not a valid command!`)
     }
     let precise = []
-    precise.push(`**Name:**${command.help.name}`)
+    precise.push(`**Name: **${command.help.name}`)
     if (command.help.description) precise.push(`**Description:** ${command.help.description}`)
     if (command.help.subcommands) precise.push(`**Subcommands:** ${command.help.subcommands}`)
     if (command.help.usage) precise.push(`**Usage:** ${command.help.usage}`)
+    message.channel.send(precise, {split: true})
   }
 }
 
