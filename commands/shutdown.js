@@ -6,7 +6,7 @@ exports.run = (client, message, args) => {
 
 exports.help = {
   name: 'shutdown',
-  description: 'Shuts the bot down. Only for a bot developer.',
+  description: 'Shuts down a bot. Only for a bot developer.',
   subcommands: 'none',
   usage: './shutdown'
 }

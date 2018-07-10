@@ -14,7 +14,7 @@ exports.run = (client, message, args) => {
 	  	jsfiles.forEach((f, i) => { 
 	  		let props = require(`./${f}`)
   			if (props.help.name) namelist = props.help.name
-  			if (props.help.descriptiondesclist = props.help.description
+  			if (props.help.description) desclist = props.help.description
         helplist.push(`**${namelist}** - ${desclist}`)
 	  		})
 	  })
