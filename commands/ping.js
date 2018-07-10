@@ -19,5 +19,5 @@ exports.help = {
 	name: 'ping',
 	description: 'Tells you your ping.',
 	subcommands: 'none',
-	usage: './ping'
+	usage: '>ping'
 }

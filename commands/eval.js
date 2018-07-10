@@ -24,5 +24,5 @@ exports.help = {
   name: 'eval',
   description: 'Evaluates a code. Only for a bot developer.',
   subcommands: 'none',
-  usage: './eval <code>'
+  usage: '>eval <code>'
 }

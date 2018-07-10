@@ -41,5 +41,5 @@ exports.help = {
 	name: 'update',
 	description: 'Updates the server list in all of the DCCI servers. Usually needs to be ran after ./addserver and ./removeserver commands. Can only be ran by DCCI Admins.',
 	subcommands: 'none',
-	usage: './update'
+	usage: '>update'
 }

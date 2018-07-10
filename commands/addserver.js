@@ -191,5 +191,5 @@ exports.help = {
   name: 'addserver',
   description: 'Adds a server to the database. Can only be ran by DCCI admins.',
   subcommands: 'none',
-  usage: './addserver'
+  usage: '>addserver'
 }

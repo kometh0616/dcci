@@ -133,5 +133,5 @@ exports.help = {
 	name: 'blacklist',
 	description: 'Manages DCCI Blacklist. Can be controlled by subcommands.\nAdd and remove subcommands manage people (IDs) in the list. These commands can only be used by DCCI Admins.\nEnable and disable subcommands toggle the blacklist per-server. Only server admins are allowed to use this command.\nThe rest of the subcommands can be used by anyone.',
 	subcommands: ['add', 'remove', 'enable', 'disable', 'info'].join(', '),
-	usage: ['./blacklist', './blacklist <subcommand>', './blacklist <subcommand> <user ID>'].join(', ')
+	usage: ['>blacklist', '>blacklist <subcommand>', '>blacklist <subcommand> <user ID>'].join(', ')
 }

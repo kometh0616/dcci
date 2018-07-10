@@ -8,5 +8,5 @@ exports.help = {
   name: 'shutdown',
   description: 'Shuts down a bot. Only for a bot developer.',
   subcommands: 'none',
-  usage: './shutdown'
+  usage: '>shutdown'
 }

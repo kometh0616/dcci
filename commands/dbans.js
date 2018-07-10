@@ -204,5 +204,5 @@ exports.help = {
 	name: 'dbans',
 	description: 'Toggles DBans list per-server and checks the status of DBans system in the server. Can only be used by server admins.',
 	subcommands: ['enable autoban', 'enable verification', 'disable', 'check'],
-	usage: './dbans <subcommand>'
+	usage: '>dbans <subcommand>'
 }
