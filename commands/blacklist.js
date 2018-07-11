@@ -21,6 +21,7 @@ exports.run = async (client, message, args) => {
 	let blacklister = message.author.tag
 	switch (args[0]){
 		case "add":
+    if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
 		if (checkBList){
 			return message.reply(`that ID is already blacklisted!`)
 		}
@@ -32,6 +33,7 @@ exports.run = async (client, message, args) => {
 		message.reply(`ID added to blacklist succesfully!`)
 		break;
 		case "remove":
+    if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
 		let removeFromBList = await Blacklist.destroy({
 			where: {
 				userID: blacklisted,

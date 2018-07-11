@@ -1,4 +1,5 @@
 exports.run = async (client, message, args) => {
+  if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
   let serverID
   let serverName
   let serverDesc
