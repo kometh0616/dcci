@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
   }
   else if (foundServer){
     logChannel.send({embed: {
-      color: message.guild.members.get(message.author.id).displayColor,
+      color: client.guilds.get("320659280686743602").members.get(client.user.id).displayColor,
       author: {
         name: message.author.username,
         icon_url: message.author.avatarURL
