@@ -35,7 +35,7 @@ exports.run = async (client, message, args) => {
 			color: client.guilds.get("320659280686743602").members.get(client.user.id).displayColor,
 			author: {
 				name: message.author.username,
-				icon_url: message.author.iconURL
+				icon_url: message.author.avatarURL
 			},
 			title: "New user added to blacklist!",
 			fields: [{
@@ -72,8 +72,8 @@ exports.run = async (client, message, args) => {
 			return message.reply("this ID is not in a blacklist!")
 		}
 		message.reply("ID removed from blacklist succesfully!")
-		client.channels.get(client.config.logChannel).send({embed: {
-			color: client.channels.get(client.config.logChannel).guild.members.get(client.user.id).displayColor,
+		client.channels.get(client.config.logChannelID).send({embed: {
+			color: client.channels.get(client.config.logChannelID).guild.members.get(client.user.id).displayColor,
 			author: {
 				name: message.author.username,
 				icon_url: message.author.avatarURL
