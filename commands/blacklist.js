@@ -22,6 +22,7 @@ exports.run = async (client, message, args) => {
 	switch (args[0]){
 		case "add":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+    if (!args[1]) return message.reply('no ID defined!')
 		if (checkBList){
 			return message.reply(`that ID is already blacklisted!`)
 		}
@@ -63,6 +64,7 @@ exports.run = async (client, message, args) => {
 		break;
 		case "remove":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+    if (!args[1]) return message.reply('no ID defined!')
 		let removeFromBList = await Blacklist.destroy({
 			where: {
 				userID: blacklisted,
@@ -135,6 +137,7 @@ exports.run = async (client, message, args) => {
 		}
 		break;
 		case "info":
+    if (!args[1]) return message.reply('no ID defined!')
 		if (!checkBList){
 			return message.reply(`this user is not blacklisted!`)
 		}
