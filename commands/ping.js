@@ -1,4 +1,5 @@
 exports.run = async (client, message, args) => {
+  let ping = new Date()
 	let thisServerID = message.guild.id;
 	let findInDatab = await Pings.findOne({
 		where: {
