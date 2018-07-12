@@ -176,7 +176,7 @@ exports.run = async (client, message, args) => {
 			attributes: ['userID']
 		})
 		let mapOut = grabAll.map(g => g.userID).join(`\n`)
-		message.reply(`Here are all the ID's that are blacklisted in DCCI:\n${mapOut}\n\nDo \`./blacklist info <id or mention>\` to get information on why were they blacklisted!`)
+		message.reply(`Here are all the ID's that are blacklisted in DCCI:\n${mapOut}\n\nDo \`>blacklist info <id or mention>\` to get information on why were they blacklisted!`)
 		break;
 	}
 }
