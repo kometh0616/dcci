@@ -32,20 +32,34 @@ exports.run = async (client, message, args) => {
 		})
 		message.reply(`ID added to blacklist succesfully!`)
     client.channels.get(client.config.logChannelID).send({embed: {
-      color: client.guilds.get("320659280686743602").members.get(client.user.id).displayColor,
-      author: {
-        name: message.author.username,
-        icon_url: message.author.iconURL
-      },
-      title: "New user blacklisted from DCCI!"
-      fields: [{
-        name: "Action performed by:"
-        value: message.author.tag
-      },
-      {
-                                                         
-      }]
-    }})
+			color: client.guilds.get("320659280686743602").members.get(client.user.id).displayColor,
+			author: {
+				name: blacklister,
+				icon_url: message.author.iconURL
+			},
+			title: "New user added to blacklist!",
+			fields: [{
+				name: "Action performed by:",
+				value: blacklister
+			},
+			{
+				name: "Blacklisted ID:",
+				value: blacklisted
+			},
+			{
+				name: "Reason for adding to blacklist:",
+				value: reasonForBList
+			},
+			{
+				name: "Blacklisted user:",
+				value: `<@${blacklisted}>`
+			}],
+			timestamp: new Date(),
+			footer: {
+				icon_url: client.user.avatarURL,
+				text: client.config.copymark
+			}
+		}})
 		break;
 		case "remove":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
