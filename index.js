@@ -47,7 +47,7 @@ fs.readdir("./models/", (err, files) => {
 		let modelName = file.split('.')[0]
 		let model = sequelize.import(`./models/${modelName}`)
 		console.log(`Attempting to sync model ${modelName}`)
-		model.sync()
+		model.sync({force: true})
 	})
 })
 

@@ -12,7 +12,7 @@ exports.run = async (client, message, args) => {
 	}
 	let thisMuch = await findInDatab.get('amount')
 	findInDatab.increment('amount').catch(console.error)
-	message.channel.send(`Pong! This command was called ${thisMuch} times!\nYour ping is: \`${client.ping}\`ms!`).catch(console.error)
+	message.channel.send(`Pong! This command was called ${thisMuch} times!\nYour ping is: \`${client.pings[0]}\`ms!`).catch(console.error)
 }
 ;
 exports.help = {
