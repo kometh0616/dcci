@@ -7,18 +7,17 @@ exports.run = async (client, message, args) => {
 	})
 	let blacklisted;
 	let reasonForBList = args.slice(2).join(" ");
-	if (!message.mentions.users.first()){
-		blacklisted = args[1]
-	}
-	else if (message.mentions.users.first()){
-		blacklisted = message.mentions.users.first().id;
-	}
+  if (args[1]){
+    let mention = message.mentions.users.first();
+    blacklisted = mention != undefined ? mention.id : args[1]
+  }
 	let checkBList = await Blacklist.findOne({
 		where: {
 			userID: blacklisted,
 		}
 	})
 	let blacklister = message.author.tag
+  console.log(client.fetchUser(blacklisted))
   let blacklistedTag = `${client.fetchUser(blacklisted).username}#${client.fetchUser(blacklisted).discriminator}`
 	switch (args[0]){
 		case "add":
