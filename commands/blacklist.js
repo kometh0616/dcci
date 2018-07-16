@@ -23,7 +23,7 @@ exports.run = async (client, message, args) => {
 		case "add":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
     if (!args[1]) return message.reply('no ID defined!')
-    if (!client.)
+    if (!client.fetchUser(blacklisted)) return message.reply('invalid ID!')
 		if (checkBList){
 			return message.reply(`that ID is already blacklisted!`)
 		}
@@ -44,8 +44,10 @@ exports.run = async (client, message, args) => {
 				name: "Action performed by:",
 				value: blacklister
 			},
+      {
         name: "Blacklisted user:",
-        value: `<@${blackliisted}>\n${client.fetchUser(blacklisted).tag}`
+        value: `<@${blacklisted}>\n${client.fetchUser(blacklisted).tag}`
+      },
 			{
 				name: "Blacklisted ID:",
 				value: blacklisted
@@ -64,6 +66,7 @@ exports.run = async (client, message, args) => {
 		case "remove":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
     if (!args[1]) return message.reply('no ID defined!')
+    if (!client.fetchUser(blacklisted)) return message.reply('invalid ID!')
 		let removeFromBList = await Blacklist.destroy({
 			where: {
 				userID: blacklisted,
@@ -87,7 +90,11 @@ exports.run = async (client, message, args) => {
 			{
 				name: "Removed ID:",
 				value: blacklisted
-			}],
+			},
+      {
+        name: "Removed user:",
+        value: `<@${blacklisted}>\n${client.fetchUser(blacklisted).tag}`
+      }],
 			timestamp: new Date(),
 			footer: {
 				icon_url: client.user.avatarURL,
@@ -151,7 +158,7 @@ exports.run = async (client, message, args) => {
 				title: "Information on blacklisted ID",
 				fields:[{
 					name: "Blacklisted user:",
-					value: `<@${checkBList.get('userID')}>`
+					value: `<@${checkBList.get('userID')}>\n${client.fetchUser(checkBList.get('userID')).tag}`
 				},
 				{
 					name: "ID:",
