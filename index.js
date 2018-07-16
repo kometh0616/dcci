@@ -20,6 +20,7 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 client.config = config;
 client.blacklist = blacklist;
+client.xlsx = XLSX;
 
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
