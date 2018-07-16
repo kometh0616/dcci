@@ -19,6 +19,7 @@ exports.run = async (client, message, args) => {
 		}
 	})
 	let blacklister = message.author.tag
+  let blacklistedTag = `${client.fetchUser()}`
 	switch (args[0]){
 		case "add":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
@@ -34,7 +35,7 @@ exports.run = async (client, message, args) => {
 		})
 		message.reply(`ID added to blacklist succesfully!`)
     client.channels.get(client.config.logChannelID).send({embed: {
-			color: client.guilds.get("320659280686743602").members.get(client.user.id).displayColor,
+			color: client.channels.get(client.config.logChannelID).guild.members.get(client.user.id).displayColor,
 			author: {
 				name: message.author.username,
 				icon_url: message.author.avatarURL
@@ -46,7 +47,7 @@ exports.run = async (client, message, args) => {
 			},
       {
         name: "Blacklisted user:",
-        value: `<@${blacklisted}>\n${client.fetchUser(blacklisted).tag}`
+        value: `<@${blacklisted}>\n${blacklistedTag}`
       },
 			{
 				name: "Blacklisted ID:",
@@ -93,7 +94,7 @@ exports.run = async (client, message, args) => {
 			},
       {
         name: "Removed user:",
-        value: `<@${blacklisted}>\n${client.fetchUser(blacklisted).tag}`
+        value: `<@${blacklisted}>\n${blacklistedTag}`
       }],
 			timestamp: new Date(),
 			footer: {
