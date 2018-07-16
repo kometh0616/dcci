@@ -4,6 +4,7 @@ const fs = require('fs');
 const Sequelize = require('sequelize')
 const { Blacklist } = require('discordblacklist')
 const apiToken = 'hNf0JGgWiP'
+const XLSX = require('xlsx')
 
 const blacklist = new Blacklist(apiToken)
 
