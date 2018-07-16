@@ -19,10 +19,3 @@ exports.run = (client, message, args) => {
 				message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
 			}
 }
-
-exports.help = {
-  name: 'eval',
-  description: 'Evaluates a code. Only for a bot developer.',
-  subcommands: 'none',
-  usage: '>eval <code>'
-}

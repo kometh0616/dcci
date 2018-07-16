@@ -14,10 +14,10 @@ exports.run = (client, message, args) => {
 	  	jsfiles.forEach((f, i) => { 
 	  		let props = require(`./${f}`)
         if (props.help){
-  		  namelist = props.help.name
-  			desclist = props.help.description
-        helplist.push(`**${namelist}** - ${desclist}`)
-        }
+  		    namelist = props.help.name
+  			  desclist = props.help.description
+          helplist.push(`**${namelist}** - ${desclist}`)
+          }
 	  		})
 	  })
   message.reply("sent you a list of my commands!")
