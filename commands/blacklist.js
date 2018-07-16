@@ -23,6 +23,7 @@ exports.run = async (client, message, args) => {
 		case "add":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
     if (!args[1]) return message.reply('no ID defined!')
+    if (!client.)
 		if (checkBList){
 			return message.reply(`that ID is already blacklisted!`)
 		}
@@ -43,6 +44,8 @@ exports.run = async (client, message, args) => {
 				name: "Action performed by:",
 				value: blacklister
 			},
+        name: "Blacklisted user:",
+        value: `<@${blackliisted}>\n${client.fetchUser(blacklisted).tag}`
 			{
 				name: "Blacklisted ID:",
 				value: blacklisted
@@ -50,10 +53,6 @@ exports.run = async (client, message, args) => {
 			{
 				name: "Reason for adding to blacklist:",
 				value: reasonForBList
-			},
-			{
-				name: "Blacklisted user:",
-				value: `<@${blacklisted}>`
 			}],
 			timestamp: new Date(),
 			footer: {
