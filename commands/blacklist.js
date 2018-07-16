@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
 		}
 	})
 	let blacklister = message.author.tag
-  let blacklistedTag = `${client.fetchUser()}`
+  let blacklistedTag = `${client.fetchUser(blacklisted).username}#${client.fetchUser(blacklisted).discriminator}`
 	switch (args[0]){
 		case "add":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
