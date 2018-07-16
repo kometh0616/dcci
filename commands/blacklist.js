@@ -17,8 +17,6 @@ exports.run = async (client, message, args) => {
 		}
 	})
 	let blacklister = message.author.tag
-  console.log(client.fetchUser(blacklisted))
-  let blacklistedTag = `${client.fetchUser(blacklisted).username}#${client.fetchUser(blacklisted).discriminator}`
 	switch (args[0]){
 		case "add":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
@@ -33,35 +31,37 @@ exports.run = async (client, message, args) => {
 			author: blacklister,
 		})
 		message.reply(`ID added to blacklist succesfully!`)
-    client.channels.get(client.config.logChannelID).send({embed: {
-			color: client.channels.get(client.config.logChannelID).guild.members.get(client.user.id).displayColor,
-			author: {
-				name: message.author.username,
-				icon_url: message.author.avatarURL
-			},
-			title: "New user added to blacklist!",
-			fields: [{
-				name: "Action performed by:",
-				value: blacklister
-			},
-      {
-        name: "Blacklisted user:",
-        value: `<@${blacklisted}>\n${blacklistedTag}`
-      },
-			{
-				name: "Blacklisted ID:",
-				value: blacklisted
-			},
-			{
-				name: "Reason for adding to blacklist:",
-				value: reasonForBList
-			}],
-			timestamp: new Date(),
-			footer: {
-				icon_url: client.user.avatarURL,
-				text: client.config.copymark
-			}
-		}})
+    client.fetchUser(blacklisted).then(user => {
+      client.channels.get(client.config.logChannelID).send({embed: {
+		  	color: client.channels.get(client.config.logChannelID).guild.members.get(client.user.id).displayColor,
+		  	author: {
+		  		name: message.author.username,
+		  		icon_url: message.author.avatarURL
+		  	},
+		  	title: "New user added to blacklist!",
+		  	fields: [{
+		  		name: "Action performed by:",
+		  		value: blacklister
+		  	},
+        {
+          name: "Blacklisted user:",
+          value: `<@${blacklisted}>\n${user.tag}`
+        },
+  			{
+  				name: "Blacklisted ID:",
+				  value: blacklisted
+			  },
+		  	{
+		  		name: "Reason for adding to blacklist:",
+		  		value: reasonForBList
+		  	}],
+		  	timestamp: new Date(),
+		  	footer: {
+		  		icon_url: client.user.avatarURL,
+		  		text: client.config.copymark
+		  	}
+		  }})
+    })
 		break;
 		case "remove":
     if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
@@ -90,11 +90,7 @@ exports.run = async (client, message, args) => {
 			{
 				name: "Removed ID:",
 				value: blacklisted
-			},
-      {
-        name: "Removed user:",
-        value: `<@${blacklisted}>\n${blacklistedTag}`
-      }],
+			}],
 			timestamp: new Date(),
 			footer: {
 				icon_url: client.user.avatarURL,

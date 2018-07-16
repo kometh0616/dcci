@@ -13,7 +13,8 @@
     "discord.js": "^11.3.2",
     "discordblacklist": "^2.0.1",
     "sequelize": "^4.38.0",
-    "sqlite3": "^4.0.1"
+    "sqlite3": "^4.0.1",
+    "xlsx": "^0.13.2"
   },
   "engines": {
     "node": "8.x"

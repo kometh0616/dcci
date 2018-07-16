@@ -3,6 +3,7 @@ dependencies:
   discordblacklist: 2.0.1
   sequelize: 4.38.0
   sqlite3: 4.0.1
+  xlsx: 0.13.2
 packages:
   /@types/geojson/1.0.6:
     dev: false
@@ -16,6 +17,16 @@ packages:
     dev: false
     resolution:
       integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
+  /adler-32/1.2.0:
+    dependencies:
+      exit-on-epipe: 1.0.1
+      printj: 1.1.2
+    dev: false
+    engines:
+      node: '>=0.8'
+    hasBin: true
+    resolution:
+      integrity: sha1-aj5r8KY5ALoVZSgIyxXGgT0aXyU=
   /ansi-regex/2.1.1:
     dev: false
     engines:
@@ -63,6 +74,16 @@ packages:
     dev: false
     resolution:
       integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
+  /cfb/1.0.8:
+    dependencies:
+      commander: 2.16.0
+      printj: 1.1.2
+    dev: false
+    engines:
+      node: '>=0.8'
+    hasBin: true
+    resolution:
+      integrity: sha1-d/ITST1pfXVP2cD1UR6rWtctAs8=
   /chownr/1.0.1:
     dev: false
     resolution:
@@ -80,6 +101,28 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
+  /codepage/1.14.0:
+    dependencies:
+      commander: 2.14.1
+      exit-on-epipe: 1.0.1
+    dev: false
+    engines:
+      node: '>=0.8'
+    hasBin: true
+    resolution:
+      integrity: sha1-jL4lSBMjVZ19MHVxsP/5HnodL5k=
+  /commander/2.14.1:
+    dev: false
+    resolution:
+      integrity: sha512-+YR16o3rK53SmWHU3rEM3tPAh2rwb1yPcQX5irVn7mb0gXbwuCCrnkbV5+PBfETdfg1vui07nM6PCG1zndcjQw==
+  /commander/2.15.1:
+    dev: false
+    resolution:
+      integrity: sha512-VlfT9F3V0v+jr4yxPc5gg9s62/fIVWsd2Bk2iD435um1NlGMYdVCq+MjcXnhYq2icNOizHr1kK+5TI6H0Hy0ag==
+  /commander/2.16.0:
+    dev: false
+    resolution:
+      integrity: sha512-sVXqklSaotK9at437sFlFpyOcJonxe0yST/AG9DkQKUdIE6IqGIMv4SfAQSKaJbSdVEJYItASCrBiVQHq1HQew==
   /concat-map/0.0.1:
     dev: false
     resolution:
@@ -92,6 +135,16 @@ packages:
     dev: false
     resolution:
       integrity: sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
+  /crc-32/1.2.0:
+    dependencies:
+      exit-on-epipe: 1.0.1
+      printj: 1.1.2
+    dev: false
+    engines:
+      node: '>=0.8'
+    hasBin: true
+    resolution:
+      integrity: sha512-1uBwHxF+Y/4yF5G48fwnKq6QsIXheor3ZLPT80yGBV1oEUwpPojlEhQbWKVw1VwcTQyMGHK1/XMmTjmlsmTTGA==
   /debug/2.6.9:
     dependencies:
       ms: 2.0.0
@@ -159,6 +212,18 @@ packages:
     dev: false
     resolution:
       integrity: sha1-2hkZgci41xPKARXViYzzl8Lw3dA=
+  /exit-on-epipe/1.0.1:
+    dev: false
+    engines:
+      node: '>=0.8'
+    resolution:
+      integrity: sha512-h2z5mrROTxce56S+pnvAV890uu7ls7f1kEvVGJbw1OlFH3/mlJ5bkXu0KRyW94v37zzHPiUd55iLn3DA7TjWpw==
+  /frac/1.1.2:
+    dev: false
+    engines:
+      node: '>=0.8'
+    resolution:
+      integrity: sha512-w/XBfkibaTl3YDqASwfDUqkna4Z2p9cFSr1aHDt0WoMTECnRfBOv2WArlZILlqgWlmdIlALXGpM2AOhEk5W3IA==
   /fs-minipass/1.2.5:
     dependencies:
       minipass: 2.3.3
@@ -420,6 +485,13 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
+  /printj/1.1.2:
+    dev: false
+    engines:
+      node: '>=0.8'
+    hasBin: true
+    resolution:
+      integrity: sha512-zA2SmoLaxZyArQTOPj5LXecR+RagfPSU5Kw1qP+jkWeNlrq+eJZyY2oS68SU1Z/7/myXM4lo9716laOFAVStCQ==
   /prism-media/0.0.2:
     dev: false
     resolution:
@@ -529,6 +601,15 @@ packages:
     requiresBuild: true
     resolution:
       integrity: sha512-i8LtU2fdEGFEt4Kcs7eNjYdGmnAQ8zWlaOv6Esbq/jfVfR0Qbn/1dgVyKebrMc2zN7h3oHsqla9zq7AJ0+34ZA==
+  /ssf/0.10.2:
+    dependencies:
+      frac: 1.1.2
+    dev: false
+    engines:
+      node: '>=0.8'
+    hasBin: true
+    resolution:
+      integrity: sha512-rDhAPm9WyIsY8eZEKyE8Qsotb3j/wBdvMWBUsOhJdfhKGLfQidRjiBUV0y/MkyCLiXQ38FG6LWW/VYUtqlIDZQ==
   /string-width/1.0.2:
     dependencies:
       code-point-at: 1.1.0
@@ -653,6 +734,21 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ZGh/8kF9rrRNffkLFV4AzhvooEclrOH0xaugmqGsIfFgOE/pIz4fMc4Ef+5HSQqTEug2S9JZIWDR47duDSLfaA==
+  /xlsx/0.13.2:
+    dependencies:
+      adler-32: 1.2.0
+      cfb: 1.0.8
+      codepage: 1.14.0
+      commander: 2.15.1
+      crc-32: 1.2.0
+      exit-on-epipe: 1.0.1
+      ssf: 0.10.2
+    dev: false
+    engines:
+      node: '>=0.8'
+    hasBin: true
+    resolution:
+      integrity: sha512-COExny0yVgLZq7ObWQkEXGzsGGtzHGT3j07nhH+jdh1mfOg5WvEqw19r350j9nOSN4Vsy2co89WlDRk5eZ9CZg==
   /yallist/3.0.2:
     dev: false
     resolution:
@@ -677,3 +773,4 @@ specifiers:
   discordblacklist: ^2.0.1
   sequelize: ^4.38.0
   sqlite3: ^4.0.1
+  xlsx: ^0.13.2
