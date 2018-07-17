@@ -15,18 +15,19 @@ const sequelize = new Sequelize('database', 'user', 'password', {
     storage: 'database.sqlite',
 });
 
+const xlsx = new XLSX()
+
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 client.config = config;
 client.blacklist = blacklist;
-client.xlsx = XLSX;
 
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
 	files.forEach(file => {
 		const event = require(`./events/${file}`);
 		let eventName = file.split(".")[0]
-		client.on(eventName, event.bind(null, client))
+		client.on(eventName, event.bind(null, client, xlsx))
 	})
 })
 

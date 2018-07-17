@@ -1,5 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (client, message, args, xlsx) => {
   if (message.author.id !== client.config.botOwnerID) return
-  var workbook = client.xlsx.readFile('./test.xlsx')
-  if (workbook) return message.channel.send('Read the file...')
+  xlsx.readFile('test.xlsx').then(message.channel.send('Done!'))
 }
