@@ -7,6 +7,7 @@ exports.run = async (client, message, args) => {
   const authorFilter = m => m.author.id === message.author.id
   let botAutoRole = message.guild.members.get(client.user.id).roles.find('name', 'DCCI')
   var logChannel = client.channels.get(client.config.logChannelID)
+  try {
   message.reply(`go to private messages, where you'll receive a prompt in which you'll be able to set a new server up!`)
   message.author.createDM().then(() => {
     message.author.dmChannel.send("Welcome to the DCCI server adding prompt! Here, servers can be added to DCCI database! Note that before you want to add a server, their staff must invite me to their server in order for this procedure to go succesfully! You'll have 30 seconds to answer each question. So, let's begin!\n\n **(IMPORTANT!!!)** What is the ID of a server you want to add?")
@@ -148,44 +149,17 @@ exports.run = async (client, message, args) => {
                     return message.author.dmChannel.send("Exiting the prompt. Try again by triggering `./addserver` command in a guild I am in.\nIf issues with data perception persist, contact the developer of this bot.")
                   }
                 })
-                .catch((error) => {
-                  console.error(error)
-                  return message.author.dmChannel.send("Exited the prompt due to no message received by an elapsed time.")
-                })
-              })
-              .catch((error) => {
-                console.error(error)
-                return message.author.dmChannel.send("Exited the prompt due to no message received by an elapsed time.")
-              })
-              .catch((error) => {
-                console.error(error)
-                return message.author.dmChannel.send("Exited the prompt due to no message received by an elapsed time.")
               })
             })
-            .catch(error => {
-              console.error(error)
-              return message.author.dmChannel.send("Exited the prompt due to no message received by an elapsed time.")
-            })
-          })
-          .catch((error) => {
-            console.error(error)
-            return message.author.dmChannel.send("Exited the prompt due to no message received by an elapsed time.")
           })
         })
-        .catch(error => {
-          console.error(error)
-          return message.author.dmChannel.send("Exited the prompt due to no message received by an elapsed time.")
-        })
-      })
-      .catch((error) => {
-        console.error(error)
-        return message.author.dmChannel.send("Exited the prompt due to no message received by an elapsed time.")
       })
     })
-    .catch(error => {
-      console.error(error)
-      return message.author.dmChannel.send("Exited the prompt due to no message received by an elapsed time.")
-    })
+  }
+  catch (error) {
+    console.error(error)
+    message.author.dmChannel.send('Exiting the prompt.')
+  }
   }
 
 exports.help = {
