@@ -3,10 +3,9 @@ const config = require('./config.json');
 const fs = require('fs');
 const Sequelize = require('sequelize')
 const { Blacklist } = require('discordblacklist')
-const apiToken = 'hNf0JGgWiP'
 const XLSX = require('xlsx')
 
-const blacklist = new Blacklist(apiToken)
+const blacklist = new Blacklist(config.apiToken)
 
 const sequelize = new Sequelize('database', 'user', 'password', {
     host: 'localhost',
@@ -54,4 +53,4 @@ fs.readdir("./models/", (err, files) => {
 })
 
 
-client.login(process.env.TOKEN)
+client.login(config.token)
