@@ -17,8 +17,29 @@ exports.run = async (client, message, args) => {
     let postEdit = new Date()
     m.edit({embed: {
       color: message.member.displayColor,
-      author
+      author: {
+        name: message.author.tag,
+        icon_url: message.author.avatarURL
+      },
+      title: "Information about ping.",
+      fields: [{
+        name: "This command was called",
+        value: `${thisMuch} times in this server.`
+      },
+      {
+        name: "Server ping:",
+        value: `${preEdit - postEdit}ms`
+      },
+      {
+        name: "API ping:",
+        value: `${client.pings[0]}ms`
+      }],
+      timestamp: new Date(),
+      footer: {
+        icon_url: client.user.avatarUR
+      }
     }})
+  })
 }
 ;
 exports.help = {
