@@ -3,7 +3,7 @@ const config = require('./config.json');
 const fs = require('fs');
 const Sequelize = require('sequelize')
 const { Blacklist } = require('discordblacklist')
-const XLSX = require('xlsx')
+const xlsx = require('xlsx')
 
 const blacklist = new Blacklist(config.apiToken)
 
@@ -14,8 +14,6 @@ const sequelize = new Sequelize('database', 'user', 'password', {
     operatorsAliases: false,
     storage: 'database.sqlite',
 });
-
-const xlsx = new XLSX()
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
