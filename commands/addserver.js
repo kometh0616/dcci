@@ -160,7 +160,7 @@ exports.run = async (client, message, args) => {
     console.error(error)
     message.author.dmChannel.send('Exiting the prompt.')
   }
-  }
+}
 
 exports.help = {
   name: 'addserver',
