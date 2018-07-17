@@ -1,5 +1,4 @@
 exports.run = async (client, message, args) => {
-  let preEdit = new Date()
 	let thisServerID = message.guild.id;
 	let findInDatab = await Pings.findOne({
 		where: {
@@ -13,6 +12,7 @@ exports.run = async (client, message, args) => {
 	}
 	let thisMuch = await findInDatab.get('amount')
 	findInDatab.increment('amount').catch(console.error)
+  let preEdit = new Date()
   message.channel.send("Please wait...").then(m => {
     let postEdit = new Date()
     m.edit({embed: {
@@ -28,7 +28,7 @@ exports.run = async (client, message, args) => {
       },
       {
         name: "Server ping:",
-        value: `${preEdit - postEdit}ms`
+        value: `${postEdit - preEdit}ms`
       },
       {
         name: "API ping:",
@@ -36,7 +36,8 @@ exports.run = async (client, message, args) => {
       }],
       timestamp: new Date(),
       footer: {
-        icon_url: client.user.avatarUR
+        icon_url: client.user.avatarURL,
+        text: client.config.copymark
       }
     }})
   })
