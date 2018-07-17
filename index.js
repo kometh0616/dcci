@@ -25,7 +25,7 @@ fs.readdir("./events/", (err, files) => {
 	files.forEach(file => {
 		const event = require(`./events/${file}`);
 		let eventName = file.split(".")[0]
-		client.on(eventName, event.bind(null, client, xlsx))
+		client.on(eventName, event.bind(null, client))
 	})
 })
 
