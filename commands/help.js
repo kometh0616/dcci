@@ -22,7 +22,7 @@ exports.run = (client, message, args) => {
 	  })
   message.reply("sent you a list of my commands!")
   message.author.createDM().then((dmChannel) => {
-  dmChannel.send(helplist, {split: true})
+  dmChannel.send(`${helplist}\n\nCheck out my source code here: https://github.com/kometh0616/dcci`, {split:true})
     })
   }
   if (args[0]){
