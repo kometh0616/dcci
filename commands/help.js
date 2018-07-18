@@ -17,12 +17,13 @@ exports.run = (client, message, args) => {
   		    namelist = props.help.name
   			  desclist = props.help.description
           helplist.push(`**${namelist}** - ${desclist}\n`)
+          helplist.join('')
           }
 	  		})
 	  })
   message.reply("sent you a list of my commands!")
   message.author.createDM().then((dmChannel) => {
-  dmChannel.send(`${helplist}\n\nCheck out my source code here: https://github.com/kometh0616/dcci`, {split:true})
+  dmChannel.send(helplist + '\n\nCheck out my source code here: https://github.com/kometh0616/dcci', {split:true})
     })
   }
   if (args[0]){
