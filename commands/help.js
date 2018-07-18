@@ -16,7 +16,7 @@ exports.run = (client, message, args) => {
         if (props.help){
   		    namelist = props.help.name
   			  desclist = props.help.description
-          helplist.push(`**${namelist}** - ${desclist}`)
+          helplist.push(`**${namelist}** - ${desclist}\n`)
           }
 	  		})
 	  })
