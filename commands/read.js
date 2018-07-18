@@ -1,10 +1,12 @@
-exports.run = (client, message, args, xlsx) => {
+const fs = require('fs')
+const xlsx = require('xlsx')
+exports.run = (client, message, args) => {
   if (message.author.id !== client.config.botOwnerID) return
   try {
-    client.xlsx.readFile('test.xlsx')
+    xlsx.readFile('test.xlsx')
     return message.channel.send('Worked!')
   }
-  catch (error){
-    return message.channel.send('Error!')
-  }
+  catch (error) {
+    console.error(error)
+    return message.channel.send(
 }
