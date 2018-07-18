@@ -8,7 +8,7 @@ exports.run = (client, message, args) => {
     let workbook = xlsx.utils.book_new({name: `${name}`})
     let aoa_data = [['Hello', 'World!'], ['Ping', 'Pong'], ['Foo', 'Bar']]
     let aoa = xlsx.utils.aoa_to_sheet(aoa_data)
-    workbook.write(aoa, ops)
+    xlsx.write(workbook, aoa, ops)
     return message.channel.send({
       files: [{
         attachment: `./${name}.xlsx`,
