@@ -1,6 +1,5 @@
 const fs = require('fs')
 const xlsx = require('xlsx')
-const request = require('request')
 exports.run = (client, message, args) => {
   if (message.author.id !== client.config.botOwnerID) return
   try {
