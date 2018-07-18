@@ -4,9 +4,8 @@ const request = require('request')
 exports.run = (client, message, args) => {
   if (message.author.id !== client.config.botOwnerID) return
   try {
-    request(url, {encoding: null}, (err, res, data) => {
-      if (err || res.statusCode !== 200) return console.error(err)
-      var 
+    let workbook = xlsx.readFile('test.xlsx')
+    return message.channel.send('Worked!')
   }
   catch (error) {
     console.error(error)
