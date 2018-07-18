@@ -4,7 +4,7 @@ exports.run = (client, message, args) => {
   if (message.author.id !== client.config.botOwnerID) return
   try {
     let name = 'sheetjs'
-    let wb = xlsx.utils.book_new({name: `${name}`})
+    let wb = { SheetNames: [], Sheets: {} }
     let opts = { bookType: 'xlsx', sheet: "Main sheet"}
     let aoa_data = [['Ping', 'Pong'], ['Foo', 'Bar']]
     let aoa = xlsx.utils.aoa_to_sheet(aoa_data)
