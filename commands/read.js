@@ -3,11 +3,12 @@ const xlsx = require('xlsx')
 exports.run = (client, message, args) => {
   if (message.author.id !== client.config.botOwnerID) return
   try {
-    let workbook = xlsx.utils.book_new()
-    let aoa_data = [['Hello', 'World!'], ['Ping', 'Pong'], ['Foo', 'Bar']]
     let name = 'sheetjs'
+    let ops = {  bookType: 'xlsx', bookSST: false, type: 'base64' }
+    let workbook = xlsx.utils.book_new({name: `${name}`})
+    let aoa_data = [['Hello', 'World!'], ['Ping', 'Pong'], ['Foo', 'Bar']]
     let aoa = xlsx.utils.aoa_to_sheet(aoa_data)
-    let sheet = xlsx.utils.book_append_sheet(workbook, aoa, name)
+    workbook.write(aoa, ops)
     return message.channel.send({
       files: [{
         attachment: `./${name}.xlsx`,
