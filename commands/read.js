@@ -10,7 +10,8 @@ exports.run = (client, message, args) => {
     let sheet = xlsx.utils.book_append_sheet(workbook, aoa, name)
     return message.channel.send({
       files: [{
-        attachment: './commands'
+        attachment: `./test.xlsx`,
+        name: `${name}.xlsx`
       }]
     })
   }
