@@ -5,11 +5,11 @@ exports.run = (client, message, args) => {
   try {
     let name = 'sheetjs'
     let ops = {  bookType: 'xlsx', bookSST: false, type: 'base64' }
-    let workbook = xlsx.utils.book_new({name: `${name}`})
+    let workbook = xlsx.utils.book_new()
     let aoa_data = [['Hello', 'World!'], ['Ping', 'Pong'], ['Foo', 'Bar']]
     let aoa = xlsx.utils.aoa_to_sheet(aoa_data)
     xlsx.write(workbook, aoa, ops)
-    return message.channel.send({
+    message.channel.send({
       files: [{
         attachment: `./${name}.xlsx`,
         name: `${name}.xlsx`
