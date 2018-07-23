@@ -1,5 +1,9 @@
 exports.run = (client, message, args) => {
-  if (message.author.id !== client.config.botOwnerID) return;
+  if (message.author.id !== client.config.botOwnerID){
+    return message.channel.send({
+      files: ['https://cdn.discordapp.com/attachments/354515583464898572/469992679435010048/SOD_OFF.png']
+    }) 
+  };
   const argument = message.content.split(" ").slice(1);
 	const clean = text => {
   	if (typeof(text) === "string")
