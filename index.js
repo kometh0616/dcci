@@ -2,10 +2,6 @@ const Discord = require('discord.js');
 const config = require('./config.json');
 const fs = require('fs');
 const Sequelize = require('sequelize')
-const { Blacklist } = require('discordblacklist')
-const xlsx = require('xlsx')
-
-const blacklist = new Blacklist(config.apiToken)
 
 const sequelize = new Sequelize('database', 'user', 'password', {
     host: 'localhost',
@@ -18,8 +14,7 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 client.config = config;
-client.blacklist = blacklist;
-client.xlsx = xlsx;
+
 
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
