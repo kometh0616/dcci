@@ -12,8 +12,7 @@
     ],
     "include": [
       "\\.js$",
-      "\\.json",
-      "\\.xlsx"
+      "\\.json"
     ]
   },
   "throttle": 900000
