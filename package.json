@@ -14,7 +14,7 @@
     "discordblacklist": "^2.0.1",
     "sequelize": "^4.38.0",
     "sqlite3": "^4.0.1",
-    "xlsx": "^0.13.2"
+    "express": "^4.16.3"
   },
   "engines": {
     "node": "8.x"
