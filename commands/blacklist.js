@@ -1,3 +1,4 @@
+const Discord = require('discord.js')
 exports.run = async (client, message, args) => {
 	let thisServerID = message.guild.id;
 	let fetchBList = await DCCIBans.findOne({
@@ -185,8 +186,64 @@ exports.run = async (client, message, args) => {
 		let grabAll = await Blacklist.findAll({
 			attributes: ['userID']
 		})
-		let mapOut = grabAll.map(g => g.userID).join(`\n`)
-		message.reply(`Here are all the ID's that are blacklisted in DCCI:\n${mapOut}\n\nDo \`>blacklist info <id or mention>\` to get information on why were they blacklisted!`, {split: true})
+		var userList = []
+		grabAll.forEach(grabbed => {
+			userList.push(grabbed.dataValues.userID)
+		})
+		var displayedList = []
+		var start = 0;
+		var end = 10
+		for (let index = start; index < end; index++){
+			if (userList[index]){
+				displayedList.push(userList[index])
+			}
+		}
+		let embed = new Discord.RichEmbed()
+		.setAuthor(message.author.tag, message.author.avatarURL)
+		.setTitle('Blacklisted ID\'s')
+		.setDescription(displayedList)
+		.setFooter(client.config.copymark, client.user.avatarURL)
+		.setTimestamp()
+		message.channel.send({embed}).then(async msg => {
+			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id 
+			await msg.react('⬅')
+			await msg.react('➡')
+			await msg.react('❌')
+			const collector = await msg.createReactionCollector(filter)
+			collector.on("collect", async reaction => {
+				await reaction.remove(message.author.id)
+				if (reaction.emoji.name === '⬅' && start != 0 && end != 9){
+					start -= 10
+					end -= 10
+					displayedList = []
+					for (let index = start; index < end; index++){
+						if (userList[index]){
+							displayedList.push(userList[index])
+						}
+					}
+					embed.setDescription(displayedList)
+					msg.edit({embed})
+				}
+				else if (reaction.emoji.name === '➡' && end <= userList.length){
+					start += 10
+					end += 10
+					displayedList = []
+					for (let index = start; index < end; index++){
+						if (userList[index]){
+							displayedList.push(userList[index])
+						}
+					}
+					embed.setDescription(displayedList)
+					msg.edit({embed})
+				}
+				else if (reaction.emoji.name === '❌'){
+					await collector.stop()
+					await msg.delete()
+					start = 0
+					end = 9
+				}
+			})
+		})
 		break;
 	}
 }
