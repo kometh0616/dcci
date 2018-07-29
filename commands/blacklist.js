@@ -239,6 +239,7 @@ exports.run = async (client, message, args) => {
 				else if (reaction.emoji.name === '❌'){
 					await collector.stop()
 					await msg.delete()
+          await message.delete()
 					start = 0
 					end = 9
 				}
