@@ -1,1 +1,0 @@
-A bot for DCCI, developed by Kometh#8342

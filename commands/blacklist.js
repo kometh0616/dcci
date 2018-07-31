@@ -198,6 +198,7 @@ exports.run = async (client, message, args) => {
 			attributes: ['userID']
 		})
 		var userList = []
+<<<<<<< HEAD
 		grabID.forEach(async grabbed => {
 			userList.push(grabbed.dataValues.userID)
 		})
@@ -208,11 +209,17 @@ exports.run = async (client, message, args) => {
 		grabTags.forEach(grabbed => {
 			tagList.push(grabbed.dataValues.tag)
 		})
+=======
+		grabAll.forEach(grabbed => {
+			userList.push(grabbed.dataValues.userID)
+		})
+>>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
 		var displayedList = []
 		var start = 0;
 		var end = 10
 		for (let index = start; index < end; index++){
 			if (userList[index]){
+<<<<<<< HEAD
 				displayedList.push(`${userList[index]} - ${tagList[index]}`)
 			}
 		}
@@ -223,6 +230,16 @@ exports.run = async (client, message, args) => {
 		.setTitle('Blacklisted ID\'s')
 		.setDescription(displayedList.join('\n'))
 		.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
+=======
+				displayedList.push(userList[index])
+			}
+		}
+		let embed = new Discord.RichEmbed()
+		.setAuthor(message.author.tag, message.author.avatarURL)
+		.setTitle('Blacklisted ID\'s')
+		.setDescription(displayedList)
+		.setFooter(client.config.copymark, client.user.avatarURL)
+>>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
 		.setTimestamp()
 		message.channel.send({embed}).then(async msg => {
 			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id 
@@ -238,12 +255,19 @@ exports.run = async (client, message, args) => {
 					displayedList = []
 					for (let index = start; index < end; index++){
 						if (userList[index]){
+<<<<<<< HEAD
 							displayedList.push(`${userList[index]} - ${tagList[index]}`)
 						}
 					}
 					currentPage--
 					embed.setDescription(displayedList.join('\n'))
 					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
+=======
+							displayedList.push(userList[index])
+						}
+					}
+					embed.setDescription(displayedList)
+>>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
 					msg.edit({embed})
 				}
 				else if (reaction.emoji.name === '➡' && end <= userList.length){
@@ -252,18 +276,28 @@ exports.run = async (client, message, args) => {
 					displayedList = []
 					for (let index = start; index < end; index++){
 						if (userList[index]){
+<<<<<<< HEAD
 							displayedList.push(`${userList[index]} - ${tagList[index]}`)
 						}
 					}
 					currentPage++
 					embed.setDescription(displayedList.join('\n'))
 					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
+=======
+							displayedList.push(userList[index])
+						}
+					}
+					embed.setDescription(displayedList)
+>>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
 					msg.edit({embed})
 				}
 				else if (reaction.emoji.name === '❌'){
 					await collector.stop()
 					await msg.delete()
+<<<<<<< HEAD
 					await message.delete()
+=======
+>>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
 					start = 0
 					end = 9
 				}
@@ -277,5 +311,5 @@ exports.help = {
 	name: 'blacklist',
 	description: 'Manages DCCI Blacklist. Can be controlled by subcommands.\nAdd and remove subcommands manage people (IDs) in the list. These commands can only be used by DCCI Admins.\nEnable and disable subcommands toggle the blacklist per-server. Only server admins are allowed to use this command.\nThe rest of the subcommands can be used by anyone.',
 	subcommands: ['add', 'remove', 'enable', 'disable', 'info'].join(', '),
-	usage: ['>blacklist', '>blacklist <subcommand>', '>blacklist <subcommand> <user ID>'].join(', ')
+	usage: ['?blacklist', '?blacklist <subcommand>', '?blacklist <subcommand> <user ID>'].join(', ')
 }

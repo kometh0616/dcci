@@ -1,6 +1,7 @@
 exports.run = (client, message, args) => {
 	if (message.author.id !== client.config.botOwnerID) return
 	const id = args[0]
+	if (!id) return
 	client.fetchUser(id).then(u => {
 		switch (args[1]){
 			case 'tag':
