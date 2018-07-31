@@ -9,8 +9,8 @@ exports.run = async (client, message, args) => {
 	let blacklisted;
 	let reasonForBList = args.slice(2).join(" ");
   if (args[1]){
-    let mention = message.mentions.users.first();
-    blacklisted = mention != undefined ? mention.id : args[1]
+	let mention = message.mentions.users.first();
+	blacklisted = mention != undefined ? mention.id : args[1]
   }
 	let checkBList = await Blacklist.findOne({
 		where: {
@@ -20,20 +20,20 @@ exports.run = async (client, message, args) => {
 	let blacklister = message.author.tag
 	switch (args[0]){
 		case "add":
-    if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
-    if (!args[1]) return message.reply('no ID defined!')
-    if (!client.fetchUser(blacklisted)) return message.reply('invalid ID!')
+	if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+	if (!args[1]) return message.reply('no ID defined!')
+	if (!client.fetchUser(blacklisted)) return message.reply('invalid ID!')
 		if (checkBList){
 			return message.reply(`that ID is already blacklisted!`)
 		}
-		let addToBList = await Blacklist.create({
-			userID: blacklisted,
-			reason: reasonForBList,
-			author: blacklister,
-		})
-		message.reply(`ID added to blacklist succesfully!`)
-    client.fetchUser(blacklisted).then(user => {
-      client.channels.get(client.config.logChannelID).send({embed: {
+		client.fetchUser(blacklisted).then(async user => {
+			await Blacklist.create({
+				userID: blacklisted,
+				tag: user.tag,
+				reason: reasonForBList,
+				author: blacklister,
+			})
+	     client.channels.get(client.config.logChannelID).send({embed: {
 		  	color: client.channels.get(client.config.logChannelID).guild.members.get(client.user.id).displayColor,
 		  	author: {
 		  		name: message.author.username,
@@ -44,10 +44,10 @@ exports.run = async (client, message, args) => {
 		  		name: "Action performed by:",
 		  		value: blacklister
 		  	},
-        {
-          name: "Blacklisted user:",
-          value: `<@${blacklisted}>\n${user.tag}`
-        },
+			{
+				name: "Blacklisted user:",
+				value: `<@${blacklisted}>\n${user.tag}`
+			},
   			{
   				name: "Blacklisted ID:",
 				  value: blacklisted
@@ -61,13 +61,21 @@ exports.run = async (client, message, args) => {
 		  		icon_url: client.user.avatarURL,
 		  		text: client.config.copymark
 		  	}
-		  }})
-    })
+		  }}).catch(err => {
+			console.log('Error in add subcommand!')
+			console.error(err)
+		})
+		  return message.reply('ID added to blacklist succesfully!')
+		}).catch(err => {
+			console.error(err)
+			if (err.code = 10013){
+				return message.reply('no user found with this ID!')
+			}
+		})
 		break;
 		case "remove":
-    if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
-    if (!args[1]) return message.reply('no ID defined!')
-    if (!client.fetchUser(blacklisted)) return message.reply('invalid ID!')
+		if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+		if (!args[1]) return message.reply('no ID defined!')
 		let removeFromBList = await Blacklist.destroy({
 			where: {
 				userID: blacklisted,
@@ -97,7 +105,10 @@ exports.run = async (client, message, args) => {
 				icon_url: client.user.avatarURL,
 				text: client.config.copymark
 			}
-		}})
+		}}).catch(err => {
+			console.log('Error in remove subcommand!')
+			console.error(err)
+		})
 		break;
 		case "enable":
 		if (!message.member.hasPermission('ADMINISTRATOR', false, true, true)) return
@@ -140,18 +151,18 @@ exports.run = async (client, message, args) => {
 		}
 		break;
 		case "info":
-    if (!args[1]) return message.reply('no ID defined!')
+	if (!args[1]) return message.reply('no ID defined!')
 		if (!checkBList){
 			return message.reply(`this user is not blacklisted!`)
 		}
 		else if (checkBList){
 			let getReason = checkBList.get('reason') || "none"
-      client.fetchUser(checkBList.get('userID')).then(user => {
+	  client.fetchUser(checkBList.get('userID')).then(user => {
 		  	message.channel.send({embed:{
 		  		color: message.member.displayColor,
 		  		author: {
-		  			name: client.user.username,
-		  			icon_url: client.user.avatarURL
+		  			name: message.author.tag,
+		  			icon_url: message.author.avatarURL
 	  			},
 		  		title: "Information on blacklisted ID",
 		  		fields:[{
@@ -176,33 +187,42 @@ exports.run = async (client, message, args) => {
 			  		text: "© DCCI Bot"
 			  	}
 			  }})
-      }).catch(err => {
-        console.log(err)
-        message.reply('an error has occured. Chances are the blacklisted user you\'ve declared is not in Discord anymore. If that is not the case, please contact a developer.')
-      })
+	  }).catch(err => {
+		console.log(err)
+		message.reply('an error has occured. Chances are the blacklisted user you\'ve declared is not in Discord anymore. If that is not the case, please contact a developer.')
+	  })
 			break;
 		}
 		default:
-		let grabAll = await Blacklist.findAll({
+		let grabID = await Blacklist.findAll({
 			attributes: ['userID']
 		})
 		var userList = []
-		grabAll.forEach(grabbed => {
+		grabID.forEach(async grabbed => {
 			userList.push(grabbed.dataValues.userID)
+		})
+		let grabTags = await Blacklist.findAll({
+			attributes: ['tag']
+		})
+		let tagList = []
+		grabTags.forEach(grabbed => {
+			tagList.push(grabbed.dataValues.tag)
 		})
 		var displayedList = []
 		var start = 0;
 		var end = 10
 		for (let index = start; index < end; index++){
 			if (userList[index]){
-				displayedList.push(userList[index])
+				displayedList.push(`${userList[index]} - ${tagList[index]}`)
 			}
 		}
+		var currentPage = 1
+		var allPages = userList.length % 10 === 0 ? userList.length / 10 : Math.floor(userList.length / 10) + 1
 		let embed = new Discord.RichEmbed()
 		.setAuthor(message.author.tag, message.author.avatarURL)
 		.setTitle('Blacklisted ID\'s')
-		.setDescription(displayedList)
-		.setFooter(client.config.copymark, client.user.avatarURL)
+		.setDescription(displayedList.join('\n'))
+		.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
 		.setTimestamp()
 		message.channel.send({embed}).then(async msg => {
 			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id 
@@ -218,10 +238,12 @@ exports.run = async (client, message, args) => {
 					displayedList = []
 					for (let index = start; index < end; index++){
 						if (userList[index]){
-							displayedList.push(userList[index])
+							displayedList.push(`${userList[index]} - ${tagList[index]}`)
 						}
 					}
-					embed.setDescription(displayedList)
+					currentPage--
+					embed.setDescription(displayedList.join('\n'))
+					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
 					msg.edit({embed})
 				}
 				else if (reaction.emoji.name === '➡' && end <= userList.length){
@@ -230,16 +252,18 @@ exports.run = async (client, message, args) => {
 					displayedList = []
 					for (let index = start; index < end; index++){
 						if (userList[index]){
-							displayedList.push(userList[index])
+							displayedList.push(`${userList[index]} - ${tagList[index]}`)
 						}
 					}
-					embed.setDescription(displayedList)
+					currentPage++
+					embed.setDescription(displayedList.join('\n'))
+					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
 					msg.edit({embed})
 				}
 				else if (reaction.emoji.name === '❌'){
 					await collector.stop()
 					await msg.delete()
-          await message.delete()
+					await message.delete()
 					start = 0
 					end = 9
 				}
