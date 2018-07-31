@@ -219,6 +219,7 @@ exports.run = async (client, message, args) => {
 		var currentPage = 1
 		var allPages = userList.length % 10 === 0 ? userList.length / 10 : Math.floor(userList.length / 10) + 1
 		let embed = new Discord.RichEmbed()
+    .setColor(message.member.displayColor)
 		.setAuthor(message.author.tag, message.author.avatarURL)
 		.setTitle('Blacklisted ID\'s')
 		.setDescription(displayedList.join('\n'))
