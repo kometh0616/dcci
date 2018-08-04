@@ -1,3 +1,3 @@
 module.exports = (client, guild) => {
-  if (guild.id in client.config.guilds === false) return guild.leave()
+  if (!client.config.guilds.find(g => g = guild.id) return guild.leave())
 }
