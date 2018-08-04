@@ -1,3 +1,4 @@
 module.exports = (client, guild) => {
-  if (!client.config.guilds.find(g => g = guild.id) return guild.leave())
+  let servers = Array.from(client.config.guilds)
+  if (servers.includes(guild.id) === false) return guild.leave()
 }
