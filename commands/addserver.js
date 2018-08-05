@@ -1,5 +1,5 @@
  exports.run = async (client, message, args) => {
-   if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+   if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) 
    let serverID
    let serverName
    let serverDesc
@@ -119,6 +119,19 @@
                          text: client.config.copymark
                        }
                      }})
+                     if (serverID === '195278167181754369'){
+                      let portalID = '325496301737476096'
+                      let addToDatab = await DCCIServers.create(
+                        {
+                          guildID: serverID,
+                          name: serverName,
+                          description: serverDesc,
+                          portalChannel: portalID,
+                          link: serverLink,
+                        }
+                      )
+                     }
+                     else {
                      client.guilds.get(serverID).createChannel('dcci-portal', 'text', [
                        {
                          id: botAutoRole.id,
@@ -141,6 +154,7 @@
                          }
                        )
                      })
+                    }
                      return message.author.dmChannel.send("Server succesfully added! You can leave this DM now!")
                    }
                  })
