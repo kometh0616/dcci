@@ -27,11 +27,7 @@ exports.run = async (client, message, args) => {
 					name: `${reBrowse.get('name')}`,
 					icon_url: client.guilds.get(ofInfo).iconURL
 				},
-				description: `${reBrowse.get('description')}\n\nLink to the server:\n${reBrowse.get('link')}`,
-				footer: {
-					icon_url: client.user.avatarURL,
-					text: client.config.copymark
-				}
+				description: `${reBrowse.get('description')}\n\nLink to the server:\n${reBrowse.get('link')}`
 			}})
 		})
 	})
