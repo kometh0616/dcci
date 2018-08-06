@@ -1,2 +1,10 @@
+<<<<<<< HEAD
+=======
 config.json
+<<<<<<< HEAD
 database.sqlite
+=======
+.env
+database.sqlite
+>>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
+>>>>>>> a08cc23041b44317d8443934e916b4ed358b63ae
