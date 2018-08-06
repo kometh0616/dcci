@@ -34,6 +34,7 @@ exports.run = async (client, message, args) => {
 	  })
   }
   setInterval(update, 900000)
+  update()
 	return message.channel.send("Done!")
 }
 
