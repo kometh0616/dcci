@@ -7,14 +7,13 @@ exports.run = async (client, message, args) => {
 		var x = 0
 		var curPage = 1
 		var allPages = servers.length
-		var server = client.guilds.get(servers[x].dataValues.guildID)
 		var embed = new RichEmbed()
-		.setAuthor(servers[x].dataValues.name, server.iconURL)
+		.setAuthor(servers[x].dataValues.name, client.guilds.get(servers[x].dataValues.guildID).iconURL)
 		.setColor(message.member.displayColor)
 		.setDescription(`${servers[x].dataValues.description}\n\n**Link to the server:**\n${servers[x].dataValues.link}`)
 		.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
 		async function updateEmbed(){
-			embed.setAuthor(servers[x].dataValues.name, server.iconURL)
+			embed.setAuthor(servers[x].dataValues.name, client.guilds.get(servers[x].dataValues.guildID).iconURL)
 			embed.setColor(message.member.displayColor)
 			embed.setDescription(`${servers[x].dataValues.description}\n\n**Link to the server:**\n${servers[x].dataValues.link}`)
 			embed.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
@@ -46,6 +45,20 @@ exports.run = async (client, message, args) => {
 				}
 			})
 		})
+	}
+  else {
+		let serverName = args.slice(0).join(" ")
+		let server = await DCCIServers.findOne({
+			where: {
+				name: serverName
+			}
+		})
+		let embed = new RichEmbed()
+		.setAuthor(server.dataValues.name, server.iconURL)
+		.setColor(message.member.displayColor)
+		.setDescription(`${server.dataValues.description}\n\n**Link to the server:**\n${server.dataValues.link}`)
+		.setFooter(`Requested by ${message.author.tag}`, client.user.avatarURL)
+		message.channel.send({embed})
 	}
 }
 
