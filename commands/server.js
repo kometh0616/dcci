@@ -53,8 +53,9 @@ exports.run = async (client, message, args) => {
 				name: serverName
 			}
 		})
+    if (!server) return message.channel.send('couldn\'t find that server in DCCI')
 		let embed = new RichEmbed()
-		.setAuthor(server.dataValues.name, server.iconURL)
+		.setAuthor(server.dataValues.name, client.guilds.get(server.dataValues.guildID).iconURL)
 		.setColor(message.member.displayColor)
 		.setDescription(`${server.dataValues.description}\n\n**Link to the server:**\n${server.dataValues.link}`)
 		.setFooter(`Requested by ${message.author.tag}`, client.user.avatarURL)
