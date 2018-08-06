@@ -198,7 +198,6 @@ exports.run = async (client, message, args) => {
 			attributes: ['userID']
 		})
 		var userList = []
-<<<<<<< HEAD
 		grabID.forEach(async grabbed => {
 			userList.push(grabbed.dataValues.userID)
 		})
@@ -209,46 +208,12 @@ exports.run = async (client, message, args) => {
 		grabTags.forEach(grabbed => {
 			tagList.push(grabbed.dataValues.tag)
 		})
-=======
-<<<<<<< HEAD
-		grabID.forEach(async grabbed => {
-			userList.push(grabbed.dataValues.userID)
-		})
-		let grabTags = await Blacklist.findAll({
-			attributes: ['tag']
-		})
-		let tagList = []
-		grabTags.forEach(grabbed => {
-			tagList.push(grabbed.dataValues.tag)
-		})
-=======
-		grabAll.forEach(grabbed => {
-			userList.push(grabbed.dataValues.userID)
-		})
->>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
->>>>>>> a08cc23041b44317d8443934e916b4ed358b63ae
 		var displayedList = []
 		var start = 0;
 		var end = 10
 		for (let index = start; index < end; index++){
 			if (userList[index]){
-<<<<<<< HEAD
 				displayedList.push(`${userList[index]} - ${tagList[index]}`)
-=======
-<<<<<<< HEAD
-				displayedList.push(`${userList[index]} - ${tagList[index]}`)
-			}
-		}
-		var currentPage = 1
-		var allPages = userList.length % 10 === 0 ? userList.length / 10 : Math.floor(userList.length / 10) + 1
-		let embed = new Discord.RichEmbed()
-		.setAuthor(message.author.tag, message.author.avatarURL)
-		.setTitle('Blacklisted ID\'s')
-		.setDescription(displayedList.join('\n'))
-		.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
-=======
-				displayedList.push(userList[index])
->>>>>>> a08cc23041b44317d8443934e916b4ed358b63ae
 			}
 		}
 		var currentPage = 1
@@ -257,14 +222,8 @@ exports.run = async (client, message, args) => {
     .setColor(message.member.displayColor)
 		.setAuthor(message.author.tag, message.author.avatarURL)
 		.setTitle('Blacklisted ID\'s')
-<<<<<<< HEAD
-		.setDescription(displayedList.join('\n'))
-		.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
-=======
 		.setDescription(displayedList)
 		.setFooter(client.config.copymark, client.user.avatarURL)
->>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
->>>>>>> a08cc23041b44317d8443934e916b4ed358b63ae
 		.setTimestamp()
 		message.channel.send({embed}).then(async msg => {
 			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id 
@@ -280,28 +239,12 @@ exports.run = async (client, message, args) => {
 					displayedList = []
 					for (let index = start; index < end; index++){
 						if (userList[index]){
-<<<<<<< HEAD
 							displayedList.push(`${userList[index]} - ${tagList[index]}`)
 						}
 					}
 					currentPage--
 					embed.setDescription(displayedList.join('\n'))
 					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
-=======
-<<<<<<< HEAD
-							displayedList.push(`${userList[index]} - ${tagList[index]}`)
-						}
-					}
-					currentPage--
-					embed.setDescription(displayedList.join('\n'))
-					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
-=======
-							displayedList.push(userList[index])
-						}
-					}
-					embed.setDescription(displayedList)
->>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
->>>>>>> a08cc23041b44317d8443934e916b4ed358b63ae
 					msg.edit({embed})
 				}
 				else if (reaction.emoji.name === '➡' && end <= userList.length){
@@ -310,41 +253,18 @@ exports.run = async (client, message, args) => {
 					displayedList = []
 					for (let index = start; index < end; index++){
 						if (userList[index]){
-<<<<<<< HEAD
 							displayedList.push(`${userList[index]} - ${tagList[index]}`)
 						}
 					}
 					currentPage++
 					embed.setDescription(displayedList.join('\n'))
 					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
-=======
-<<<<<<< HEAD
-							displayedList.push(`${userList[index]} - ${tagList[index]}`)
-						}
-					}
-					currentPage++
-					embed.setDescription(displayedList.join('\n'))
-					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
-=======
-							displayedList.push(userList[index])
-						}
-					}
-					embed.setDescription(displayedList)
->>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
->>>>>>> a08cc23041b44317d8443934e916b4ed358b63ae
 					msg.edit({embed})
 				}
 				else if (reaction.emoji.name === '❌'){
 					await collector.stop()
 					await msg.delete()
-<<<<<<< HEAD
 					await message.delete()
-=======
-<<<<<<< HEAD
-					await message.delete()
-=======
->>>>>>> 1e56869fccbb38a60b56fae3f2fc1f3327f29ae7
->>>>>>> a08cc23041b44317d8443934e916b4ed358b63ae
 					start = 0
 					end = 9
 				}
