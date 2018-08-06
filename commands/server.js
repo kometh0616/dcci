@@ -7,15 +7,51 @@ exports.run = async (client, message, args) => {
 		var x = 0
 		var curPage = 1
 		var allPages = servers.length
-		var server = await client.guilds.get(servers[x].dataValues.guildID)
+		var server = client.guilds.get(servers[x].dataValues.guildID)
 		var embed = new RichEmbed()
-		.setAuthor(servers[x].dataValues.name)
-    .setColor(message.member.displayColor)
-		.setThumbnail(server.iconURL)
-		.setDescription(servers[x].dataValues.description)
-		.addField('Link to the server:', servers[x].dataValues.link)
+		.setAuthor(servers[x].dataValues.name, server.iconURL)
+		.setColor(message.member.displayColor)
+		.setDescription(`${servers[x].dataValues.description}\n\n**Link to the server:**\n${servers[x].dataValues.link}`)
 		.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
-    .setTimestamp()
-		await message.channel.send({embed})
+		async function updateEmbed(){
+			embed.setAuthor(servers[x].dataValues.name, server.iconURL)
+			embed.setColor(message.member.displayColor)
+			embed.setDescription(`${servers[x].dataValues.description}\n\n**Link to the server:**\n${servers[x].dataValues.link}`)
+			embed.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
+		}
+		await message.channel.send({embed}).then(async m => {
+			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id 
+			await m.react('⬅')
+			await m.react('➡')
+			await m.react('❌')
+			const collector = m.createReactionCollector(filter)
+			collector.on('collect', async reaction => {
+				await reaction.remove(message.author.id)
+				if (reaction.emoji.name === '⬅' && curPage !== 1){
+					x--;
+					curPage--;
+					updateEmbed()
+					await m.edit({embed})
+				}
+				else if (reaction.emoji.name === '➡' && curPage !== allPages){
+					x++;
+					curPage++;
+					updateEmbed()
+					await m.edit({embed})
+				}
+				else if (reaction.emoji.name === '❌'){
+					await collector.stop()
+					await m.delete()
+					await message.delete()
+				}
+			})
+		})
 	}
+}
+
+exports.help = {
+	name: 'server',
+	description: 'Shows you information about servers that belong to DCCI.',
+	subcommands: 'none',
+	usage: ['>server', '>server <server name>'].join(', ')
 }
