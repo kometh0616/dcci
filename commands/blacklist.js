@@ -223,7 +223,7 @@ exports.run = async (client, message, args) => {
 		.setAuthor(message.author.tag, message.author.avatarURL)
 		.setTitle('Blacklisted ID\'s')
 		.setDescription(displayedList)
-		.setFooter(client.config.copymark, client.user.avatarURL)
+		.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
 		.setTimestamp()
 		message.channel.send({embed}).then(async msg => {
 			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id 
