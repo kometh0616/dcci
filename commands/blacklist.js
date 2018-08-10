@@ -247,7 +247,7 @@ exports.run = async (client, message, args) => {
 					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
 					msg.edit({embed})
 				}
-				else if (reaction.emoji.name === '➡' && end <= userList.length){
+				else if (reaction.emoji.name === '➡' && currentPage !== allPages){
 					start += 10
 					end += 10
 					displayedList = []
