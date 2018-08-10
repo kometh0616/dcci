@@ -15,14 +15,14 @@ exports.run = async (client, message, args) => {
 	    var eColor = client.guilds.get(serverID).members.get(client.user.id).displayColor
 		  var IDfromDatab = browseDatab.get('portalChannel')
 		  var portal = client.channels.get(IDfromDatab)
-		  portal.bulkDelete(outerArray.length)
+		  await portal.bulkDelete(outerArray.length)
 		  innerArray.forEach(async ofInfo => {
 		  	let reBrowse = await DCCIServers.findOne({
 		  		where: {
 		  			guildID: ofInfo,
 		  		}
 		  	})
-		  	portal.send({embed: {
+		  	await portal.send({embed: {
 		  		color: eColor,
 		  		author: {
 		  			name: `${reBrowse.get('name')}`,
