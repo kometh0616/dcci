@@ -11,7 +11,7 @@ exports.run = async (client, message, args) => {
   if (args[1]){
 	let mention = message.mentions.users.first();
 	blacklisted = mention != undefined ? mention.id : args[1]
-  }
+  	}
 	let checkBList = await Blacklist.findOne({
 		where: {
 			userID: blacklisted,
@@ -20,9 +20,9 @@ exports.run = async (client, message, args) => {
 	let blacklister = message.author.tag
 	switch (args[0]){
 		case "add":
-	if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
-	if (!args[1]) return message.reply('no ID defined!')
-	if (!client.fetchUser(blacklisted)) return message.reply('invalid ID!')
+		if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+		if (!args[1]) return message.reply('no ID defined!')
+		if (!client.fetchUser(blacklisted)) return message.reply('invalid ID!')
 		if (checkBList){
 			return message.reply(`that ID is already blacklisted!`)
 		}
@@ -110,6 +110,79 @@ exports.run = async (client, message, args) => {
 			console.error(err)
 		})
 		break;
+		case "bulkadd":
+		var blackIDs = []
+		var included = []
+		for (let arg of args) {
+			if (arg === 'bulkadd' || isNaN(arg) === true) continue
+			let checkIDs = await Blacklist.findOne({
+				where: {
+					userID: arg
+				}
+			})
+			if (checkIDs) {
+				included.push(checkIDs.dataValues.userID)
+				continue
+			}
+			blackIDs.push(arg)
+		}
+		async function perform() {
+			blackIDs.forEach(async id => {
+				async function addToList() {
+					client.fetchUser(id).then(async user => {
+						let reasonForBList = args.slice(blackIDs.length + 1).join(' ') || "None"
+						await Blacklist.create({
+							userID: user.id,
+							tag: user.tag,
+							reason: reasonForBList,
+							author: blacklister
+						})
+						await client.channels.get(client.config.logChannelID).send({embed: {
+							color: client.channels.get(client.config.logChannelID).guild.members.get(client.user.id).displayColor,
+							author: {
+								name: message.author.username,
+								icon_url: message.author.avatarURL
+							},
+							title: "New user added to blacklist!",
+							fields: [{
+								name: "Action performed by:",
+								value: blacklister
+							},
+							 {
+							name: "Blacklisted user:",
+							value: `<@${id}>\n${user.tag}`
+							},
+							{
+								name: "Blacklisted ID:",
+								value: id
+							},
+							{
+								name: "Reason for adding to blacklist:",
+								value: reasonForBList
+							}],
+							timestamp: new Date(),
+							footer: {
+								icon_url: client.user.avatarURL,
+								text: client.config.copymark
+							}
+						}})
+					}).catch(async err => {
+						console.error(err)
+						if (err.code = 10013) await message.channel.send(`User with ID ${id} doesn't exist, skipping...`)
+					})
+				}
+			})
+		}
+		await perform()
+		async function answer() {
+			let reply = 'ID\'s added to blacklist succesfully!'
+			if (included[0] !== undefined) {
+				reply += `\nThese ID's were skipped because they were already in a blacklist:\n${included.join('\n')}`
+			}
+			await message.reply(reply)
+		}
+		await answer()
+		break;
 		case "enable":
 		if (!message.member.hasPermission('ADMINISTRATOR', false, true, true)) return
 		if (!fetchBList){
@@ -150,6 +223,36 @@ exports.run = async (client, message, args) => {
 			message.reply(`DCCI blacklist has been disabled for this server!`)
 		}
 		break;
+		case "purge":
+		if (!message.member.hasPermission('ADMINISTRATOR')) return
+		const filter = m => m.author.id === message.author.id
+		message.channel.send(`**__WARNING!!!__**\nThis command will perform a whole server members' inspection and will ban every single user that is currently blacklisted from joining DCCI servers. Are you sure you want to perform this action? (Type in \`PURGE\` in capital letters to continue.)`)
+		.then(() => {
+			message.channel.awaitMessages(filter, {
+				max: 1,
+				time: 40000,
+				errors: ['time']
+			})
+			.then(collected => {
+				if (collected.first().content === 'PURGE'){
+					message.guild.members.forEach(async m => {
+						let id = m.id
+						let isInDatab = await Blacklist.findOne({
+							where: {
+								userID: id
+							}
+						})
+						if (isInDatab && m.bannable === true) m.ban(`Banned due to ID match in a blacklist. Purge command performed by ${message.author.tag}.`)
+					})
+					return message.reply('Purge completed succesfully! You have no more blacklisted members anymore!')
+				}
+				else message.channel.send('Purge has been canceled.')
+			})
+			.catch(() => {
+				message.channel.send('No messages received. Cancelling the purge.')
+			})
+		})
+		break;
 		case "info":
 	if (!args[1]) return message.reply('no ID defined!')
 		if (!checkBList){
@@ -157,7 +260,7 @@ exports.run = async (client, message, args) => {
 		}
 		else if (checkBList){
 			let getReason = checkBList.get('reason') || "none"
-	  client.fetchUser(checkBList.get('userID')).then(user => {
+			client.fetchUser(checkBList.get('userID')).then(user => {
 		  	message.channel.send({embed:{
 		  		color: message.member.displayColor,
 		  		author: {
@@ -219,10 +322,9 @@ exports.run = async (client, message, args) => {
 		var currentPage = 1
 		var allPages = userList.length % 10 === 0 ? userList.length / 10 : Math.floor(userList.length / 10) + 1
 		let embed = new Discord.RichEmbed()
-    .setColor(message.member.displayColor)
 		.setAuthor(message.author.tag, message.author.avatarURL)
 		.setTitle('Blacklisted ID\'s')
-		.setDescription(displayedList)
+		.setDescription(displayedList.join('\n'))
 		.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
 		.setTimestamp()
 		message.channel.send({embed}).then(async msg => {
@@ -247,7 +349,7 @@ exports.run = async (client, message, args) => {
 					embed.setFooter(`Page ${currentPage}/${allPages}`, client.user.avatarURL)
 					msg.edit({embed})
 				}
-				else if (reaction.emoji.name === '➡' && currentPage !== allPages){
+				else if (reaction.emoji.name === '➡' && end <= userList.length){
 					start += 10
 					end += 10
 					displayedList = []
@@ -274,9 +376,10 @@ exports.run = async (client, message, args) => {
 	}
 }
 
+
 exports.help = {
 	name: 'blacklist',
 	description: 'Manages DCCI Blacklist. Can be controlled by subcommands.\nAdd and remove subcommands manage people (IDs) in the list. These commands can only be used by DCCI Admins.\nEnable and disable subcommands toggle the blacklist per-server. Only server admins are allowed to use this command.\nThe rest of the subcommands can be used by anyone.',
 	subcommands: ['add', 'remove', 'enable', 'disable', 'info'].join(', '),
-	usage: ['?blacklist', '?blacklist <subcommand>', '?blacklist <subcommand> <user ID>'].join(', ')
+	usage: ['>blacklist', '>blacklist <subcommand>', '>blacklist <subcommand> <user ID>'].join(', ')
 }
