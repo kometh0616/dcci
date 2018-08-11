@@ -171,6 +171,7 @@ exports.run = async (client, message, args) => {
 						if (err.code = 10013) await message.channel.send(`User with ID ${id} doesn't exist, skipping...`)
 					})
 				}
+        setTimeout(addToList, 2000)
 			})
 		}
 		await perform()
