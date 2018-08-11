@@ -43,5 +43,5 @@
  	name: 'help',
  	description: 'DM\'s you this list of commands.',
  	subcommands: 'none',
- 	usage: '?help'
+ 	usage: '>help'
  }

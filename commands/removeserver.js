@@ -55,5 +55,5 @@ exports.help = {
   name: 'removeserver',
   description: 'Removes a server from a database. Can only be ran by DCCI admins.',
   subcommands: 'none',
-  usage: '?removeserver <serverID>'
+  usage: '>removeserver <serverID>'
 }
