@@ -29,13 +29,13 @@ exports.run = async (client, message, args) => {
 				if (reaction.emoji.name === '⬅' && curPage !== 1){
 					x--;
 					curPage--;
-					updateEmbed()
+				  await updateEmbed()
 					await m.edit({embed})
 				}
 				else if (reaction.emoji.name === '➡' && curPage !== allPages){
 					x++;
 					curPage++;
-					updateEmbed()
+					await updateEmbed()
 					await m.edit({embed})
 				}
 				else if (reaction.emoji.name === '❌'){
