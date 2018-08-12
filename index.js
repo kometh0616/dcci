@@ -25,6 +25,7 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
+client.blacklistSubcommands = new Discord.Collection()
 client.config = config;
 
 
@@ -45,6 +46,16 @@ fs.readdir("./commands/", (err, files) => {
 		let commandName = file.split(".")[0]
 		console.log(`Attempting to load command ${commandName}`)
 		client.commands.set(commandName, props)
+	})
+})
+
+fs.readdir('./commands/blacklist/', (err, files) => {
+	if (err) return console.error(err)
+	files.forEach(file => {
+		let props = require(`./commands/blacklist/${file}`)
+		let subName = file.split('.')[0]
+		console.log(`Attempting to load subcommand ${subName} for command blacklist`)
+		client.blacklistSubcommands.set(subName, props)
 	})
 })
 
