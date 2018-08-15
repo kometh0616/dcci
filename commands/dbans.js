@@ -160,7 +160,7 @@ exports.run = async (client, message, args) => {
 		await message.reply('DBANS system succesfully disabled for this server!')
 		break;
 		case 'verify':
-			if (!message.member.hasPermission('ADMINISTRATOR')) return
+			if (!message.member.hasPermission('MANAGE_MESSAGES')) return
 			if (verification) {
 				let mentionedUser = message.mentions.members.first()
 				if (!mentionedUser) return message.reply('please mention a user you want to verify!')
