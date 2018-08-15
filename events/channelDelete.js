@@ -4,11 +4,23 @@ module.exports = async (client, channel) => {
 			serverID: channel.guild.id
 		}
 	})
-	if (!newsChannel) return
-	else if (newsChannel){
+	let DBansVerificationChannel = await DBans.findOne({
+		where: {
+			guildID: channel.guild.id,
+			verification: true
+		}
+	})
+	if (newsChannel && channel.id === newsChannel.get('channelID')){
 		await newsChannel.destroy({
 			where: {
 				serverID: channel.guild.id
+			}
+		})
+	}
+	if (DBansVerificationChannel && channel.id === DBansVerificationChannel.get('channelID')) {
+		await DBansVerificationChannel.destroy({
+			where: {
+				guildID: channel.guild.id
 			}
 		})
 	}
