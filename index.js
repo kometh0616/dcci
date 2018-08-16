@@ -12,6 +12,7 @@ setInterval(() => {
 
 const Discord = require('discord.js');
 const config = require('./config.json');
+config.apiToken = process.env.APITOKEN
 const fs = require('fs');
 const Sequelize = require('sequelize')
 
