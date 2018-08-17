@@ -38,7 +38,24 @@ exports.run = async (client, message, args) => {
 								guildID: thisServerID
 							}
 						})
-						return await message.reply('DBANS autoban system is enabled for this server!')
+						return await message.reply('DBANS autoban system is enabled for this server!').then(async () => {
+							let browse = await Logchannels.findOne({
+								where: {
+									guildID: message.guild.id
+								}
+							})
+							if (!browse) return
+							let logChannel = message.guild.channels.get(browse.get('channelID'))
+							let embed = new RichEmbed()
+							.setColor(message.guild.members.get(client.user.id).displayColor)
+							.setAuthor(message.author.tag, message.author.avatarURL)
+							.setTitle('DBANS system was enabled!')
+							.addField('Action performed by: ', message.author.tag)
+							.addField('Mode:', 'Autoban')
+							.setFooter(client.config.copymark, client.user.avatarURL)
+							.setTimestamp()
+							logChannel.send({embed})
+						})
 					} else if (verification) {
 							let role = verification.get('roleID')
 							let roleInServer = message.guild.roles.get(role)
@@ -56,7 +73,24 @@ exports.run = async (client, message, args) => {
 									guildID: thisServerID
 								}
 							})
-							return await message.reply('DBANS autoban system is enabled for this server!')
+							return await message.reply('DBANS autoban system is enabled for this server!').then(async () => {
+								let browse = await Logchannels.findOne({
+									where: {
+										guildID: message.guild.id
+									}
+								})
+								if (!browse) return
+								let logChannel = message.guild.channels.get(browse.get('channelID'))
+								let embed = new RichEmbed()
+								.setColor(message.guild.members.get(client.user.id).displayColor)
+								.setAuthor(message.author.tag, message.author.avatarURL)
+								.setTitle('DBANS system was enabled!')
+								.addField('Action performed by: ', message.author.tag)
+								.addField('Mode:', 'Autoban')
+								.setFooter(client.config.copymark, client.user.avatarURL)
+								.setTimestamp()
+								logChannel.send({embed})
+							})
 					} else if (autoBans) {
 							return message.reply('DBANS autoban system is already enabled! If you want DBanned users to be verified instead, do `>dbans enable verification`, or, if you want to disable the system entirely, do `>dbans disable`!')
 					}
@@ -119,7 +153,24 @@ exports.run = async (client, message, args) => {
 							console.error(err)
 							await message.channel.send('Couldn\'t create a channel for DBanned people. Make sure I either have `Administrator` or `Manage Channels` permissions!')
 						})
-						return await message.reply(`DBANS verification system enabled succesfully!`)
+						return await message.reply(`DBANS verification system enabled succesfully!`).then(async () => {
+							let browse = await Logchannels.findOne({
+								where: {
+									guildID: message.guild.id
+								}
+							})
+							if (!browse) return
+							let logChannel = message.guild.channels.get(browse.get('channelID'))
+							let embed = new RichEmbed()
+							.setColor(message.guild.members.get(client.user.id).displayColor)
+							.setAuthor(message.author.tag, message.author.avatarURL)
+							.setTitle('DBANS system was enabled!')
+							.addField('Action performed by: ', message.author.tag)
+							.addField('Mode:', 'Verification')
+							.setFooter(client.config.copymark, client.user.avatarURL)
+							.setTimestamp()
+							logChannel.send({embed})
+						})
 					} else if (verification) {
 						return await message.reply('DBANS verification system is already enabled! If you want to autoban DBanned people, do `>dbans enable autoban`, or, if you want to disable the system completely, do `>dbans disable`!')
 					}
@@ -157,16 +208,53 @@ exports.run = async (client, message, args) => {
 				}
 			})
 		}
-		await message.reply('DBANS system succesfully disabled for this server!')
+		await message.reply('DBANS system succesfully disabled for this server!').then(async () => {
+			let browse = await Logchannels.findOne({
+				where: {
+					guildID: message.guild.id
+				}
+			})
+			if (!browse) return
+			let logChannel = message.guild.channels.get(browse.get('channelID'))
+			let embed = new RichEmbed()
+			.setColor(message.guild.members.get(client.user.id).displayColor)
+			.setAuthor(message.author.tag, message.author.avatarURL)
+			.setTitle('DBANS system was disabled!')
+			.addField('Action performed by: ', message.author.tag)
+			.setFooter(client.config.copymark, client.user.avatarURL)
+			.setTimestamp()
+			logChannel.send({embed})
+		})
 		break;
 		case 'verify':
-			if (!message.member.hasPermission('MANAGE_MESSAGES')) return
+			if (!message.member.hasPermission('ADMINISTRATOR')) return
 			if (verification) {
 				let mentionedUser = message.mentions.members.first()
 				if (!mentionedUser) return message.reply('please mention a user you want to verify!')
 				let verificationRole = message.guild.roles.get(verification.get('roleID'))
 				await mentionedUser.removeRole(verificationRole, `User verified by ${message.author.tag}.`)
-				await message.reply('user verified succesfully!')
+				await message.reply('user verified succesfully!').then(async () => {
+					blacklist.lookup(mentionedUser.user.id).then(async res => {
+						let browse = await Logchannels.findOne({
+							where: {
+								guildID: message.guild.id
+							}
+						})
+						if (!browse) return
+						let logChannel = message.guild.channels.get(browse.get('channelID'))
+						let embed = new RichEmbed()
+						.setColor(message.guild.members.get(client.user.id).displayColor)
+						.setAuthor(message.author.tag, message.author.avatarURL)
+						.setTitle('DBanned user verified!')
+						.addField('Action performed by: ', message.author.tag)
+						.addField('Verified user:', `${mentionedUser} (${mentionedUser.user.tag})`)
+						.addField('Reason for verified user\'s ban:', res.reason)
+						.addField('Evidence (may contain NSFW content):', res.proof)
+						.setFooter(client.config.copymark, client.user.avatarURL)
+						.setTimestamp()
+						logChannel.send({embed})
+					})
+				})
 			} else {
 				await message.reply('this server has DBANS verification system disabled!')
 			}
