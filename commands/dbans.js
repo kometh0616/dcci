@@ -263,7 +263,7 @@ exports.run = async (client, message, args) => {
 			let id = args[1]
 			client.fetchUser(id).then(async u => {
 				await blacklist.lookup(u.id).then(async res => {
-					if (res.banned === 0) return await message.reply('this member is not DBanned!')
+					if (res.banned === "0" ) return await message.reply('this member is not DBanned!')
 					let embed = new RichEmbed()
 					.setAuthor(u.tag, u.avatarURL)
 					.setColor(message.member.displayColor)
