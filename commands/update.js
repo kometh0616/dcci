@@ -1,6 +1,5 @@
 exports.run = async (client, message, args) => {
   if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
-  async function update() {
     var allServers = await DCCIServers.findAll({
 		  attributes: ['guildID']
 	  })
@@ -15,7 +14,7 @@ exports.run = async (client, message, args) => {
 	    var eColor = client.guilds.get(serverID).members.get(client.user.id).displayColor
 		  var IDfromDatab = browseDatab.get('portalChannel')
 		  var portal = client.channels.get(IDfromDatab)
-		  await portal.bulkDelete(outerArray.length)
+		  portal.fetchMessages({limit: outerArray.length}).then(collection => collection.forEach(message => message.delete()))
 		  innerArray.forEach(async ofInfo => {
 		  	let reBrowse = await DCCIServers.findOne({
 		  		where: {
@@ -32,9 +31,6 @@ exports.run = async (client, message, args) => {
 		  	}})
 	  	})
 	  })
-  }
-  setInterval(update, 604800000)
-  update()
 	return message.channel.send("Done!")
 }
 
