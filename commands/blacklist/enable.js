@@ -1,5 +1,6 @@
 exports.run = async (client, message, args, Discord, thisServerID, fetchBList, blacklisted, reasonForBList, checkBList, blacklister) => {
     if (!message.member.hasPermission('ADMINISTRATOR', false, true, true)) return
+    const { RichEmbed } = require('discord.js')
     if (!fetchBList){
         fetchBList = await DCCIBans.create({
             guildID: thisServerID,
