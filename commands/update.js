@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
 	    var eColor = client.guilds.get(serverID).members.get(client.user.id).displayColor
 		  var IDfromDatab = browseDatab.get('portalChannel')
 		  var portal = client.channels.get(IDfromDatab)
-		  portal.fetchMessages({limit: outerArray.length}).then(collection => collection.forEach(message => message.delete()))
+		  portal.fetchMessages({limit: outerArray.length}).then(collection => collection.forEach(async message =>  await message.delete()))
 		  innerArray.forEach(async ofInfo => {
 		  	let reBrowse = await DCCIServers.findOne({
 		  		where: {
