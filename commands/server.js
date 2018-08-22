@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
 			embed.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
 		}
 		await message.channel.send({embed}).then(async m => {
-			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id 
+			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id
 			await m.react('⬅')
 			await m.react('➡')
 			await m.react('❌')
@@ -29,13 +29,13 @@ exports.run = async (client, message, args) => {
 				if (reaction.emoji.name === '⬅' && curPage !== 1){
 					x--;
 					curPage--;
-				  await updateEmbed()
+					updateEmbed()
 					await m.edit({embed})
 				}
 				else if (reaction.emoji.name === '➡' && curPage !== allPages){
 					x++;
 					curPage++;
-					await updateEmbed()
+					updateEmbed()
 					await m.edit({embed})
 				}
 				else if (reaction.emoji.name === '❌'){
@@ -46,26 +46,71 @@ exports.run = async (client, message, args) => {
 			})
 		})
 	}
-  else {
+	else if (args[0] !== '--satellite') {
 		let serverName = args.slice(0).join(" ")
 		let server = await DCCIServers.findOne({
 			where: {
 				name: serverName
 			}
 		})
-    if (!server) return message.reply('couldn\'t find that server in DCCI.')
 		let embed = new RichEmbed()
-		.setAuthor(server.dataValues.name, client.guilds.get(server.dataValues.guildID).iconURL)
+		.setAuthor(server.dataValues.name, server.iconURL)
 		.setColor(message.member.displayColor)
 		.setDescription(`${server.dataValues.description}\n\n**Link to the server:**\n${server.dataValues.link}`)
-		.setFooter(`Requested by ${message.author.tag}`, client.user.avatarURL)
+		.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
 		message.channel.send({embed})
 	}
+  else {
+    const satellites = await DCCISatellite.findAll({
+      attributes: ['guildID', 'name', 'description', 'link']
+    })
+    x = 0
+    curPage = 1
+    allPages = satellites.length
+    var embed = new RichEmbed()
+    .setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
+    .setColor(message.member.displayColor)
+    .setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
+    .setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`)
+    async function updateSat() {
+      embed.setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
+      embed.setColor(message.member.displayColor)
+      embed.setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
+      embed.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
+    }
+    await message.channel.send({embed}).then(async m => {
+      const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id
+      await m.react('⬅')
+      await m.react('➡')
+      await m.react('❌')
+      const collector = m.createReactionCollector(filter)
+      collector.on('collect', async reaction => {
+        await reaction.remove(message.author.id)
+        if (reaction.emoji.name === '⬅' && curPage !== 1){
+          x--;
+          curPage--;
+          updateSat()
+          await m.edit({embed})
+        }
+        else if (reaction.emoji.name === '➡' && curPage !== allPages){
+          x++;
+          curPage++;
+          updateSat()
+          await m.edit({embed})
+        }
+        else if (reaction.emoji.name === '❌'){
+          await collector.stop()
+          await m.delete()
+          await message.delete()
+        }
+      })
+    })
+  }
 }
 
 exports.help = {
 	name: 'server',
 	description: 'Shows you information about servers that belong to DCCI.',
-	subcommands: 'none',
-	usage: ['>server', '>server <server name>'].join(', ')
+	subcommands: '--satellite',
+	usage: ['>server', '>server <server name>', '>server <subcommand>'].join(', ')
 }

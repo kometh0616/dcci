@@ -10,10 +10,17 @@ exports.run = async (client, message, args) => {
       guildID: serverID,
     }
   })
-  if (!foundServer){
+  let foundSatellite = await DCCISatellite.findOne({
+    where: {
+      guildID: serverID,
+    }
+  })
+  if (!foundServer && !foundSatellite){
     return message.reply("this server ID is not in a DCCI database!")
   }
-  else if (foundServer){
+  else {
+    let type = foundServer ? "Mainstream" : "Satellite"
+    let model = foundServer ? foundServer : foundSatellite
     logChannel.send({embed: {
       color: client.guilds.get("320659280686743602").members.get(client.user.id).displayColor,
       author: {
@@ -27,11 +34,15 @@ exports.run = async (client, message, args) => {
       },
       {
         name: "Server ID:",
-        value: `${foundServer.get('guildID')}`
+        value: `${model.get('guildID')}`
       },
       {
         name: "Server name:",
-        value: `${foundServer.get('name')}`
+        value: `${model.get('name')}`
+      },
+      {
+        name: "Server type:",
+        value: type
       }],
       timestamp: new Date(),
       footer: {
@@ -48,6 +59,13 @@ exports.run = async (client, message, args) => {
         guildID: serverID,
       }
     })
+    if (!removeServer) {
+      await DCCISatellite.destroy({
+        where: {
+          guildID: serverID,
+        }
+      })
+    }
   }
 }
 
@@ -55,5 +73,5 @@ exports.help = {
   name: 'removeserver',
   description: 'Removes a server from a database. Can only be ran by DCCI admins.',
   subcommands: 'none',
-  usage: '>removeserver <serverID>'
+  usage: '?removeserver <serverID>'
 }

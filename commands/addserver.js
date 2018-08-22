@@ -5,11 +5,10 @@
    let serverDesc
    let serverLink
    const authorFilter = m => m.author.id === message.author.id
-   let botAutoRole = message.guild.members.get(client.user.id).roles.find('name', 'DCCI')
    var logChannel = client.channels.get(client.config.logChannelID)
    message.reply(`go to private messages, where you'll receive a prompt in which you'll be able to set a new server up!`)
    message.author.createDM().then(() => {
-     message.author.dmChannel.send("Welcome to the DCCI server adding prompt! Here, servers can be added to DCCI database! Note that before you want to add a server, their staff must invite me to their server in order for this procedure to go succesfully! You'll have 30 seconds to answer each question. So, let's begin!\n\n **(IMPORTANT!!!)** What is the ID of a server you want to add?")
+     message.author.dmChannel.send("Welcome to the DCCI server adding prompt! Here, servers can be added to DCCI satellite database! Note that before you want to add a server, their staff must invite me to their server in order for this procedure to go succesfully! You'll have 30 seconds to answer each question. So, let's begin!\n\n**(IMPORTANT!!!)** What is the ID of a server you want to add?")
      .then(() => {
        message.author.dmChannel.awaitMessages(authorFilter, {
          max: 1,
@@ -23,7 +22,12 @@
              guildID: serverID,
            }
          })
-         if (peepIDs){
+         let peepSat = await DCCISatellite.findOne({
+           where: {
+             guildID: serverID,
+           }
+         })
+         if (peepIDs || peepSat) {
            return message.author.dmChannel.send("This ID already exists in a database! Exiting the prompt.")
          }
          if (!client.guilds.get(serverID)){
@@ -70,6 +74,10 @@
                    {
                      name: "Server link:",
                      value: `${serverLink}`
+                   },
+                   {
+                     name: "Server type:",
+                     value: "Mainstream"
                    }
                  ],
                  timestamp: new Date(),
@@ -94,7 +102,7 @@
                          icon_url: message.author.avatarURL
                        },
                        title: "New server added to database!",
-                       fields: 
+                       fields:
                        [
                          {
                            name: "Action performed by:",
@@ -103,7 +111,7 @@
                          {
                            name: "Server ID:",
                            value: serverID
-                         },  
+                         },
                          {
                            name: "Server name:",
                            value: serverName
@@ -111,6 +119,10 @@
                          {
                            name: "Server link:",
                            value: serverLink
+                         },
+                         {
+                           name: "Server type:",
+                           value: "Mainstream"
                          }
                        ],
                        timestamp: new Date(),
@@ -119,19 +131,7 @@
                          text: client.config.copymark
                        }
                      }})
-                     if (serverID === '195278167181754369'){
-                      let portalID = '325496301737476096'
-                      let addToDatab = await DCCIServers.create(
-                        {
-                          guildID: serverID,
-                          name: serverName,
-                          description: serverDesc,
-                          portalChannel: portalID,
-                          link: serverLink,
-                        }
-                      )
-                     }
-                     else {
+                     let botAutoRole = client.guilds.get(serverID).members.get(client.user.id).roles.find('name', 'DCCI')
                      client.guilds.get(serverID).createChannel('dcci-portal', 'text', [
                        {
                          id: botAutoRole.id,
@@ -141,8 +141,7 @@
                          id: client.guilds.get(serverID).id,
                          deny: ['SEND_MESSAGES']
                        }
-                     ]
-                   )
+                     ])
                      .then(async (createdChannel) => {
                        let addToDatab = await DCCIServers.create(
                          {
@@ -155,8 +154,7 @@
                        )
                      })
                     }
-                     return message.author.dmChannel.send("Server succesfully added! You can leave this DM now!")
-                   }
+                  return message.author.dmChannel.send("Server succesfully added! You can leave this DM now!")
                  })
                    if (collected.first().content === "no"){
                      return message.author.dmChannel.send("Exiting the prompt. Try again by triggering `./addserver` command in a guild I am in.\nIf issues with data perception persist, contact the developer of this bot.")
