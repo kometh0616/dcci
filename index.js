@@ -28,6 +28,7 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 client.blacklistSubcommands = new Discord.Collection()
 client.config = config;
+client.sequelize = sequelize
 
 
 fs.readdir("./events/", (err, files) => {

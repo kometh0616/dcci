@@ -3,10 +3,9 @@ exports.run = async (client, message, args) => {
   if (!args[0]) return message.reply('no Sequelize model defined.')
   let modelName = args[0]
   const { readdir } = require('fs')
-  const { sequelize } = require(`../index.js`)
   readdir('../models/', (err, files) => {
     if (!err) return console.error(err)
-    let model = sequelize.import(`../models/${modelName}`)
+    let model = client.sequelize.import(`../models/${modelName}`)
     model.sync().then(() => message.reply('model ${modelName} synced succesfully!'))
   })
 }
