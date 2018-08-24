@@ -22,7 +22,7 @@ exports.run = async (client, message, args) => {
         channelID: channel.id
       })
       const main = await DCCIServers.findAll({
-        attributes: ['guildID']
+        attributes: ['guildID', 'name', 'description', 'link']
       })
       main.forEach(async model => {
         let guild = client.guilds.get(model.dataValues.guildID)
@@ -45,6 +45,7 @@ exports.run = async (client, message, args) => {
         }
       })
       const logChannel = message.guild.channels.get(logModel.get('channelID'))
+      if (!logc
       await logChannel.send({embed})
     }).catch(err => {
       console.error(err)
