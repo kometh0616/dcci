@@ -7,12 +7,13 @@ exports.run = async (client, message, args) => {
     attributes: ['guildID']
   })
   var manualPortals = await ManualPortal.findAll({
-    attributes: ['guildID', 'channelID']
+    attributes: ['guildID']
   })
 	var outerArray = Array.from(allServers.map(a => a.guildID))
 	var innerArray = Array.from(allServers.map(a => a.guildID))
   var outerSat = Array.from(allSatellites.map(a => a.guildID))
   var innerSat = Array.from(allSatellites.map(a => a.guildID))
+  var manualMainArray = Array.from(manualPortals.map(m => m.guildID))
   try {
     outerArray.forEach(async serverID => {
       var browseDatab = await DCCIServers.findOne({
@@ -73,18 +74,28 @@ exports.run = async (client, message, args) => {
       })
       return message.channel.send("Done!")
     } finally {
-      manualPortals.forEach(model => {
-        let portal = client.channels.get(model.dataValues.channelID)
-        portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
-        allServers.forEach(async model => {
-          let eColor = client.guilds.get(model.dataValues.guildID).members.get(client.user.id).displayColor
+      manualMainArray.forEach(async id => {
+        let browseDatab = await ManualPortal.findOne({
+          where: {
+            guildID: id
+          }
+        })
+        let eColor = client.channels.get(id).guild.members.get(client.user.id).displayColor
+        let idFromDatab = browseDatab.get('channelID')
+        var portal = client.channels.get(idFromDatab)
+        innerArray.forEach(async ofInfo => {
+          let reBrowse = await DCCIServers.findOne({
+            where: {
+              guildID: ofInfo,
+            }
+          })
           await portal.send({embed: {
             color: eColor,
             author: {
-              name: model.dataValues.name,
-              icon_url: client.guilds.get(model.dataValues.guildID).iconURL
+              name: `${reBrowse.get('name')}`,
+              icon_url: client.guilds.get(ofInfo).iconURL
             },
-            description: model.dataValues.description
+            description: `${reBrowse.get('description')}\n\nLink to the server:\n${reBrowse.get('link')}`,
           }})
         })
       })
