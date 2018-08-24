@@ -72,9 +72,8 @@ exports.run = async (client, message, args) => {
           }})
         })
       })
-      return message.channel.send("Done!")
     } finally {
-
+      return message.channel.send("Done!")
     }
   }
   manualMainArray.forEach(async id => {

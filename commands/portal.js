@@ -6,7 +6,7 @@ exports.run = async (client, message, args) => {
       guildID: message.guild.id
     }
   })
-  if (!server) return message.reply('this feature is only for satellite servers!')
+  if (!server && message.guild.id !== '463344128273678336') return message.reply('this feature is only for satellite servers!')
   else if (args[0] === 'init') {
     message.guild.createChannel('dcci-portal', 'text', [{
       id: message.guild.id,
@@ -49,11 +49,10 @@ exports.run = async (client, message, args) => {
       await logChannel.send({embed})
     }).catch(err => {
       console.error(err)
-      return message.channel.send('Something went wrong. Please make sure bot has permissions to manage channels.')
     })
   }
   else if (args[0] === 'destroy') {
-    let isSetup = await DCCISatellite.findOne({
+    let isSetup = await ManualPortal.findOne({
       where: {
         guildID: message.guild.id
       }
