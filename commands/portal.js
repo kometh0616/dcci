@@ -25,12 +25,12 @@ exports.run = async (client, message, args) => {
         attributes: ['guildID']
       })
       main.forEach(async model => {
-        let guild = client.guilds.get(model.get('guildID'))
+        let guild = client.guilds.get(model.dataValues.guildID)
         let embed = new RichEmbed()
         .setColor(message.guild.members.get(client.user.id).displayColor)
-        .setAuthor(model.get('name'), guild.iconURL)
-        .setDescription(`${model.get('description')}\n\nLink to the server:\n${model.get('link')}`)
-        await message.channel.send({embed})
+        .setAuthor(model.dataValues.name, guild.iconURL)
+        .setDescription(`${model.dataValues.description}\n\nLink to the server:\n${model.dataValues.link}`)
+        await channel.send({embed})
       })
       await message.reply('main DCCI portal set up for your server succesfully!')
       const embed = new RichEmbed()
