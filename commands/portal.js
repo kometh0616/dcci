@@ -6,8 +6,12 @@ exports.run = async (client, message, args) => {
       guildID: message.guild.id
     }
   })
-  if (!server && message.guild.id !== '463344128273678336') return message.reply('this feature is only for satellite servers!')
+  if (!server) return message.reply('this feature is only for satellite servers!')
   else if (args[0] === 'init') {
+    let setup = await ManualPortal.findOne({where: {
+      guildID: message.guild.id
+    }})
+    if (setup) return message.reply('DCCI main portal is already set up for your server!')
     message.guild.createChannel('dcci-portal', 'text', [{
       id: message.guild.id,
       deny: ['SEND_MESSAGES']
