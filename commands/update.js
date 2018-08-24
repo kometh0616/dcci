@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
     attributes: ['guildID']
   })
   var manualPortals = await ManualPortal.findAll({
-    attributes: ['guildID']
+    attributes: ['guildID', 'channelID']
   })
 	var outerArray = Array.from(allServers.map(a => a.guildID))
 	var innerArray = Array.from(allServers.map(a => a.guildID))
@@ -74,17 +74,17 @@ exports.run = async (client, message, args) => {
       return message.channel.send("Done!")
     } finally {
       manualPortals.forEach(model => {
-        let portal = client.channels.get(model.get('channelID'))
+        let portal = client.channels.get(model.dataValues.channelID)
         portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
         allServers.forEach(async model => {
-          let eColor = client.guilds.get(model.get('guildID')).members.get(client.user.id).displayColor
+          let eColor = client.guilds.get(model.dataValues.guildID).members.get(client.user.id).displayColor
           await portal.send({embed: {
             color: eColor,
             author: {
-              name: model.get('name'),
-              icon_url: client.guilds.get(model.get('guildID')).iconURL
+              name: model.dataValues.name,
+              icon_url: client.guilds.get(model.dataValues.guildID).iconURL
             },
-            description: model.get('description')
+            description: model.dataValues.description
           }})
         })
       })

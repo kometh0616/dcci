@@ -45,7 +45,7 @@ exports.run = async (client, message, args) => {
         }
       })
       const logChannel = message.guild.channels.get(logModel.get('channelID'))
-      if (!logc
+      if (!logChannel) return
       await logChannel.send({embed})
     }).catch(err => {
       console.error(err)
