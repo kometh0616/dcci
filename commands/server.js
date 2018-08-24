@@ -4,10 +4,10 @@ exports.run = async (client, message, args) => {
 		const servers = await DCCIServers.findAll({
 			attributes: ['guildID', 'name', 'description', 'link']
 		})
-		var x = 0
-		var curPage = 1
-		var allPages = servers.length
-		var embed = new RichEmbed()
+		let x = 0
+		let curPage = 1
+		let allPages = servers.length
+		let embed = new RichEmbed()
 		.setAuthor(servers[x].dataValues.name, client.guilds.get(servers[x].dataValues.guildID).iconURL)
 		.setColor(message.member.displayColor)
 		.setDescription(`${servers[x].dataValues.description}\n\n**Link to the server:**\n${servers[x].dataValues.link}`)
@@ -64,10 +64,10 @@ exports.run = async (client, message, args) => {
     const satellites = await DCCISatellite.findAll({
       attributes: ['guildID', 'name', 'description', 'link']
     })
-    x = 0
-    curPage = 1
-    allPages = satellites.length
-    var embed = new RichEmbed()
+    let x = 0
+    let curPage = 1
+    let allPages = satellites.length
+    let embed = new RichEmbed()
     .setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
     .setColor(message.member.displayColor)
     .setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
@@ -89,13 +89,13 @@ exports.run = async (client, message, args) => {
         if (reaction.emoji.name === '⬅' && curPage !== 1){
           x--;
           curPage--;
-          updateSat()
+          await updateSat()
           await m.edit({embed})
         }
         else if (reaction.emoji.name === '➡' && curPage !== allPages){
           x++;
           curPage++;
-          updateSat()
+          await updateSat()
           await m.edit({embed})
         }
         else if (reaction.emoji.name === '❌'){
