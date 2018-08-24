@@ -50,21 +50,27 @@ exports.run = async (client, message, args) => {
       var eColor = client.guilds.get(serverID).members.get(client.user.id).displayColor
       var IDfromDatab = browseDatab.get('portalChannel')
       var portal = client.channels.get(IDfromDatab)
-      portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
+      portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete())).catch(err => {
+        console.log(client.guilds.get(serverID).name)
+        console.error(err)
+      })
       innerSat.forEach(async ofInfo => {
         let reBrowse = await DCCISatellite.findOne({
           where: {
             guildID: ofInfo,
           }
         })
-        await portal.send({embed: {
+        portal.send({embed: {
           color: eColor,
           author: {
             name: `${reBrowse.get('name')}`,
             icon_url: client.guilds.get(ofInfo).iconURL
           },
           description: `${reBrowse.get('description')}\n\nLink to the server:\n${reBrowse.get('link')}`,
-        }})
+        }}).catch(err => {
+          console.log(client.guilds.get(serverID).name)
+          console.error(err)
+        })
       })
     })
     return message.channel.send("Done!")
