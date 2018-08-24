@@ -7,6 +7,6 @@ exports.run = async (client, message, args) => {
     if (!err) return console.error(err)
     let model = client.sequelize.import(`../models/${modelName}`)
     if (!model) return message.reply(`no Sequelize model found with the name of ${modelName}.`)
-    model.sync().then(() => message.reply('model ${modelName} synced succesfully!'))
+    model.sync().then(() => message.reply(`model ${modelName} synced succesfully!`))
   })
 }
