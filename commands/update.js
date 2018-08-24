@@ -80,7 +80,7 @@ exports.run = async (client, message, args) => {
             guildID: id
           }
         })
-        let eColor = client.channels.get(id).guild.members.get(client.user.id).displayColor
+        let eColor = client.channels.get(browseDatab.get('channelID')).guild.members.get(client.user.id).displayColor
         let idFromDatab = browseDatab.get('channelID')
         var portal = client.channels.get(idFromDatab)
         innerArray.forEach(async ofInfo => {
