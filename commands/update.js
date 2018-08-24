@@ -72,36 +72,36 @@ exports.run = async (client, message, args) => {
           }})
         })
       })
-    } finally {
       return message.channel.send("Done!")
+    } finally {
+      manualMainArray.forEach(async id => {
+        let browseDatab = await ManualPortal.findOne({
+          where: {
+            guildID: id
+           }
+         })
+        let eColor = client.guilds.get(id).members.get(client.user.id).displayColor
+        let idFromDatab = browseDatab.get('channelID')
+        var portal = client.channels.get(idFromDatab)
+        portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
+        innerArray.forEach(async ofInfo => {
+          let reBrowse = await DCCIServers.findOne({
+            where: {
+              guildID: ofInfo,
+             }
+          })
+          await portal.send({embed: {
+             color: eColor,
+             author: {
+              name: `${reBrowse.get('name')}`,
+              icon_url: client.guilds.get(ofInfo).iconURL
+             },
+             description: `${reBrowse.get('description')}\n\nLink to the server:\n${reBrowse.get('link')}`,
+          }})
+        })
+     })
     }
   }
-  manualMainArray.forEach(async id => {
-  let browseDatab = await ManualPortal.findOne({
-    where: {
-      guildID: id
-     }
-   })
-  let eColor = client.guilds.get(id).members.get(client.user.id).displayColor
-  let idFromDatab = browseDatab.get('channelID')
-  var portal = client.channels.get(idFromDatab)
-  portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
-  innerArray.forEach(async ofInfo => {
-    let reBrowse = await DCCIServers.findOne({
-      where: {
-        guildID: ofInfo,
-       }
-    })
-    await portal.send({embed: {
-       color: eColor,
-       author: {
-        name: `${reBrowse.get('name')}`,
-          icon_url: client.guilds.get(ofInfo).iconURL
-        },
-       description: `${reBrowse.get('description')}\n\nLink to the server:\n${reBrowse.get('link')}`,
-     }})
-   })
- })
 }
 
 exports.help = {
