@@ -50,7 +50,7 @@ exports.run = async (client, message, args) => {
       var eColor = client.guilds.get(serverID).members.get(client.user.id).displayColor
       var IDfromDatab = browseDatab.get('portalChannel')
       var portal = client.channels.get(IDfromDatab)
-      portal.fetchMessages({limit: outerArray.length}).then(collection => collection.forEach(async message => await message.delete()))
+      portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
       innerSat.forEach(async ofInfo => {
         let reBrowse = await DCCISatellite.findOne({
           where: {
