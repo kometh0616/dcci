@@ -82,7 +82,7 @@ exports.run = async (client, message, args) => {
           portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
           outerArray.forEach(async id => {
             let model = await DCCIServers.findOne({where: {guildID: id}})
-            let eColor = client.guilds.get(model.get('guildID')).members.get(client.user.id).displayColor
+            let eColor = portal.guild.me.displayColor
             await portal.send({embed: {
               color: eColor,
               author: {
@@ -99,7 +99,7 @@ exports.run = async (client, message, args) => {
           portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
           outerSat.forEach(async id => {
             let model = await DCCISatellite.findOne({where: {guildID: id}})
-            let eColor = client.guilds.get(model.get('guildID')).members.get(client.user.id).displayColor
+            let eColor = portal.guild.me.displayColor
             await portal.send({embed: {
               color: eColor,
               author: {
