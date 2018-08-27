@@ -89,7 +89,7 @@ exports.run = async (client, message, args) => {
                 name: model.get('name'),
                 icon_url: client.guilds.get(model.get('guildID')).iconURL
               },
-              description: model.get('description')
+              description: `
             }})
           })
         })
