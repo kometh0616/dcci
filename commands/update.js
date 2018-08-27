@@ -7,10 +7,10 @@ exports.run = async (client, message, args) => {
     attributes: ['guildID']
   })
   var manualPortals = await ManualPortal.findAll({
-    attributes: ['guildID']
+    attributes: ['guildID', 'channelID']
   })
   var manualSatellites = await ManualSatellite.findAll({
-    attributes: ['guildID']
+    attributes: ['guildID', 'channelID']
   })
 	var outerArray = Array.from(allServers.map(a => a.guildID))
 	var innerArray = Array.from(allServers.map(a => a.guildID))
@@ -78,9 +78,10 @@ exports.run = async (client, message, args) => {
     } finally {
       try {
         manualPortals.forEach(model => {
-          let portal = client.channels.get(model.get('channelID'))
+          let portal = client.channels.get(model.dataValues.channelID)
           portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
-          allServers.forEach(async model => {
+          outerArray.forEach(async id => {
+            let model = await DCCIServers.findOne({where: {guildID: id}})
             let eColor = client.guilds.get(model.get('guildID')).members.get(client.user.id).displayColor
             await portal.send({embed: {
               color: eColor,
@@ -94,9 +95,10 @@ exports.run = async (client, message, args) => {
         })
       } finally {
         manualSatellites.forEach(model => {
-          let portal = client.channels.get(model.get('channelID'))
+          let portal = client.channels.get(model.dataValues.channelID)
           portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
-          allSatellites.forEach(async model => {
+          outerSat.forEach(async id => {
+            let model = await DCCISatellite.findOne({where: {guildID: id}})
             let eColor = client.guilds.get(model.get('guildID')).members.get(client.user.id).displayColor
             await portal.send({embed: {
               color: eColor,

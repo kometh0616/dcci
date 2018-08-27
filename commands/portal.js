@@ -57,10 +57,14 @@ exports.run = async (client, message, args) => {
     })
   }
   else if (args[0] === 'destroy') {
-    let isSetup = await DCCISatellite.findOne({where: {guildID: message.guild.id }}) || await DCCIServers.findOne({where: {guildID: message.guild.id}})
-    if (!isSetup) return message.reply('no set up portal found.')
+    let isSetup = await DCCISatellite.findOne({where: {guildID: message.guild.id}})
+    let satSetup = await DCCIServers.findOne({where: {guildID: message.guild.id}})
+    if (!isSetup && !satSetup) return message.reply('no set up portal found.')
     else {
       let channel = client.channels.get(isSetup.get('channelID'))
+      if (!channel) {
+        channel = client.channels.get(satSetup.get('channelID'))
+      }
       await channel.delete()
       let portal = await ManualPortal.destroy({where: {guildID: message.guild.id}})
       if (!portal) await ManualSatellite.destroy({where: {guildID: message.guild.id}})
