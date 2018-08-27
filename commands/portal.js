@@ -1,32 +1,36 @@
 const { RichEmbed } = require('discord.js')
 exports.run = async (client, message, args) => {
   if (!message.member.hasPermission('ADMINISTRATOR')) return
-  const server = await DCCISatellite.findOne({
+  const name = args[1] === 'satellite' ? 'satellite-portal' : 'dcci-portal'
+  const postModel = args[1] === 'satellite' ? DCCISatellite : DCCIServers
+  const checkup = args[1] === 'satellite' ? DCCIServers : DCCISatellite
+  const response = args[1] === 'satellite' ? 'mainstream' : 'satellite'
+  const initModel = args[1] === 'satellite' ? ManualSatellite : ManualPortal
+  const regex = response === 'mainstream' ? /^m/ : /^s/
+  const letter = regex === /^m/ ? 'M' : 'S'
+  const server = await checkup.findOne({
     where: {
       guildID: message.guild.id
     }
   })
-  if (!server) return message.reply('this feature is only for satellite servers!')
+  if (!server) return message.reply(`this feature is only for ${response} servers!`)
   else if (args[0] === 'init') {
-    let setup = await ManualPortal.findOne({where: {
-      guildID: message.guild.id
-    }})
-    if (setup) return message.reply('DCCI main portal is already set up for your server!')
-    message.guild.createChannel('dcci-portal', 'text', [{
+    let isSetup = await initModel.findOne({where: {guildID: message.guild.id}})
+    if (isSetup) return message.reply(`manual ${response} portal is already set up!`)
+    message.guild.createChannel(name, 'text', [{
       id: message.guild.id,
       deny: ['SEND_MESSAGES']
     },
     {
-      // NOTE: Guild needs to have the role named as "DCCI".
       id: message.guild.members.get(client.user.id).roles.find('name', 'DCCI').id,
       allow: ['SEND_MESSAGES', 'EMBED_LINKS', 'READ_MESSAGES']
     }]).then(async channel => {
-      await ManualPortal.create({
+      await initModel.create({
         guildID: message.guild.id,
         channelID: channel.id
       })
-      const main = await DCCIServers.findAll({
-        attributes: ['guildID', 'name', 'description', 'link']
+      const main = await postModel.findAll({
+        attributes: ['guildID']
       })
       main.forEach(async model => {
         let guild = client.guilds.get(model.dataValues.guildID)
@@ -34,13 +38,13 @@ exports.run = async (client, message, args) => {
         .setColor(message.guild.members.get(client.user.id).displayColor)
         .setAuthor(model.dataValues.name, guild.iconURL)
         .setDescription(`${model.dataValues.description}\n\nLink to the server:\n${model.dataValues.link}`)
-        await channel.send({embed})
+        await message.channel.send({embed})
       })
-      await message.reply('main DCCI portal set up for your server succesfully!')
+      await message.reply(`${response.replace(regex, letter)} DCCI portal set up for your server succesfully!`)
       const embed = new RichEmbed()
       .setAuthor(message.author.tag, message.author.avatarURL)
       .setColor(message.guild.members.get(client.user.id).displayColor)
-      .setTitle('Main DCCI portal setup enabled!')
+      .setTitle(`${response.replace(regex, letter)} DCCI portal setup enabled!`)
       .addField('Action performed by:', message.author.tag)
       .setFooter(client.user.avatarURL, client.config.copymark)
       const logModel = await Logchannels.findOne({
@@ -49,32 +53,22 @@ exports.run = async (client, message, args) => {
         }
       })
       const logChannel = message.guild.channels.get(logModel.get('channelID'))
-      if (!logChannel) return
       await logChannel.send({embed})
-    }).catch(err => {
-      console.error(err)
     })
   }
   else if (args[0] === 'destroy') {
-    let isSetup = await ManualPortal.findOne({
-      where: {
-        guildID: message.guild.id
-      }
-    })
+    let isSetup = await DCCISatellite.findOne({where: {guildID: message.guild.id }}) || await DCCIServers.findOne({where: {guildID: message.guild.id}})
     if (!isSetup) return message.reply('no set up portal found.')
     else {
       let channel = client.channels.get(isSetup.get('channelID'))
       await channel.delete()
-      await ManualPortal.destroy({
-        where: {
-          guildID: message.guild.id
-        }
-      })
-      await message.reply('main DCCI portal setup removed from your server succesfully!')
+      let portal = await ManualPortal.destroy({where: {guildID: message.guild.id}})
+      if (!portal) await ManualSatellite.destroy({where: {guildID: message.guild.id}})
+      await message.reply('manual DCCI portal setup removed from your server succesfully!')
       const embed = new RichEmbed()
       .setAuthor(message.author.tag, message.author.avatarURL)
       .setColor(message.guild.members.get(client.user.id).displayColor)
-      .setTitle('Main DCCI portal setup disabled!')
+      .setTitle(`${response.replace(regex, letter)} DCCI portal setup disabled!`)
       .addField('Action performed by:', message.author.tag)
       .setFooter(client.user.avatarURL, client.config.copymark)
       const logModel = await Logchannels.findOne({
