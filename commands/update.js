@@ -89,7 +89,7 @@ exports.run = async (client, message, args) => {
                 name: model.get('name'),
                 icon_url: client.guilds.get(model.get('guildID')).iconURL
               },
-              description: `
+              description: `${model.get('description')}\n\nLink to the server:\n${model.get('link')}`
             }})
           })
         })
@@ -106,7 +106,7 @@ exports.run = async (client, message, args) => {
                 name: model.get('name'),
                 icon_url: client.guilds.get(model.get('guildID')).iconURL
               },
-              description: model.get('description')
+              description: `${model.get('description')}\n\nLink to the server:\n${model.get('link')}`
             }})
           })
         })
