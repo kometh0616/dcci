@@ -9,11 +9,13 @@ exports.run = async (client, message, args) => {
   var manualPortals = await ManualPortal.findAll({
     attributes: ['guildID']
   })
+  var manualSatellites = await ManualSatellite.findAll({
+    attributes: ['guildID']
+  })
 	var outerArray = Array.from(allServers.map(a => a.guildID))
 	var innerArray = Array.from(allServers.map(a => a.guildID))
   var outerSat = Array.from(allSatellites.map(a => a.guildID))
   var innerSat = Array.from(allSatellites.map(a => a.guildID))
-  var manualMainArray = Array.from(manualPortals.map(m => m.guildID))
   try {
     outerArray.forEach(async serverID => {
       var browseDatab = await DCCIServers.findOne({
@@ -74,36 +76,42 @@ exports.run = async (client, message, args) => {
       })
       return message.channel.send("Done!")
     } finally {
-      manualMainArray.forEach(async id => {
-        let browseDatab = await ManualPortal.findOne({
-          where: {
-            guildID: id
-           }
-         })
-        let eColor = client.guilds.get(id).members.get(client.user.id).displayColor
-        let idFromDatab = browseDatab.get('channelID')
-        var portal = client.channels.get(idFromDatab)
-        portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
-        innerArray.forEach(async ofInfo => {
-          let reBrowse = await DCCIServers.findOne({
-            where: {
-              guildID: ofInfo,
-             }
+      try {
+        manualPortals.forEach(model => {
+          let portal = client.channels.get(model.get('channelID'))
+          portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
+          allServers.forEach(async model => {
+            let eColor = client.guilds.get(model.get('guildID')).members.get(client.user.id).displayColor
+            await portal.send({embed: {
+              color: eColor,
+              author: {
+                name: model.get('name'),
+                icon_url: client.guilds.get(model.get('guildID')).iconURL
+              },
+              description: model.get('description')
+            }})
           })
-          await portal.send({embed: {
-             color: eColor,
-             author: {
-              name: `${reBrowse.get('name')}`,
-              icon_url: client.guilds.get(ofInfo).iconURL
-             },
-             description: `${reBrowse.get('description')}\n\nLink to the server:\n${reBrowse.get('link')}`,
-          }})
         })
-     })
+      } finally {
+        manualSatellites.forEach(model => {
+          let portal = client.channels.get(model.get('channelID'))
+          portal.fetchMessages().then(collection => collection.forEach(async message => await message.delete()))
+          allSatellites.forEach(async model => {
+            let eColor = client.guilds.get(model.get('guildID')).members.get(client.user.id).displayColor
+            await portal.send({embed: {
+              color: eColor,
+              author: {
+                name: model.get('name'),
+                icon_url: client.guilds.get(model.get('guildID')).iconURL
+              },
+              description: model.get('description')
+            }})
+          })
+        })
+      }
     }
   }
 }
-
 exports.help = {
 	name: 'update',
 	description: 'Updates the server list in all of the DCCI servers. Usually needs to be ran after >addserver and >removeserver commands. Can only be ran by DCCI Admins.',

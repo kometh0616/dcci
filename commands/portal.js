@@ -13,8 +13,8 @@ exports.run = async (client, message, args) => {
       guildID: message.guild.id
     }
   })
-  if (!server) return message.reply(`this feature is only for ${response} servers!`)
-  else if (args[0] === 'init') {
+  if (args[0] === 'init') {
+    if (!server) return message.reply(`this feature is only for ${response} servers!`)
     let isSetup = await initModel.findOne({where: {guildID: message.guild.id}})
     if (isSetup) return message.reply(`manual ${response} portal is already set up!`)
     message.guild.createChannel(name, 'text', [{
@@ -30,7 +30,7 @@ exports.run = async (client, message, args) => {
         channelID: channel.id
       })
       const main = await postModel.findAll({
-        attributes: ['guildID']
+        attributes: ['guildID', 'name', 'description', 'link']
       })
       main.forEach(async model => {
         let guild = client.guilds.get(model.dataValues.guildID)
@@ -38,9 +38,9 @@ exports.run = async (client, message, args) => {
         .setColor(message.guild.members.get(client.user.id).displayColor)
         .setAuthor(model.dataValues.name, guild.iconURL)
         .setDescription(`${model.dataValues.description}\n\nLink to the server:\n${model.dataValues.link}`)
-        await message.channel.send({embed})
+        await channel.send({embed})
       })
-      await message.reply(`${response.replace(regex, letter)} DCCI portal set up for your server succesfully!`)
+      await message.reply(`:thumbsup:`)
       const embed = new RichEmbed()
       .setAuthor(message.author.tag, message.author.avatarURL)
       .setColor(message.guild.members.get(client.user.id).displayColor)
@@ -64,7 +64,7 @@ exports.run = async (client, message, args) => {
       await channel.delete()
       let portal = await ManualPortal.destroy({where: {guildID: message.guild.id}})
       if (!portal) await ManualSatellite.destroy({where: {guildID: message.guild.id}})
-      await message.reply('manual DCCI portal setup removed from your server succesfully!')
+      await message.reply(':thumbsup:')
       const embed = new RichEmbed()
       .setAuthor(message.author.tag, message.author.avatarURL)
       .setColor(message.guild.members.get(client.user.id).displayColor)
