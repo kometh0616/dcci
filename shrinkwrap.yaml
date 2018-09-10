@@ -1293,7 +1293,7 @@ packages:
     resolution:
       integrity: sha1-hFK0u36Dx8GI2AQcGoN8dz1ti7k=
 registry: 'https://registry.npmjs.org/'
-shrinkwrapMinorVersion: 8
+shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
   discord.js: ^11.3.2
