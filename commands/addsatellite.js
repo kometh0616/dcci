@@ -131,7 +131,7 @@ exports.run = async (client, message, args) => {
                         text: client.config.copymark
                       }
                     }})
-                    let botAutoRole = client.guilds.get(serverID).members.get(client.user.id).roles.find('name', 'DCCI')
+                    let botAutoRole = client.guilds.get(serverID).me.roles.find('name', 'DCCI')
                     client.guilds.get(serverID).createChannel('satellite-portal', 'text', [
                       {
                         id: botAutoRole.id,
@@ -143,15 +143,31 @@ exports.run = async (client, message, args) => {
                       }
                     ])
                     .then(async (createdChannel) => {
-                      let addToDatab = await DCCISatellite.create(
+                      DCCISatellite.create(
                         {
                           guildID: serverID,
                           name: serverName,
                           description: serverDesc,
                           portalChannel: createdChannel.id,
                           link: serverLink,
-                        }
-                      )
+                      })
+                      .then(() => {
+                        client.guilds.get(serverID).createChannel('dcci-news', 'text', [
+                          {
+                            id: botAutoRole.id,
+                            allow: ['SEND_MESSAGES', 'MANAGE_WEBHOOKS', 'EMBED_LINKS']
+                          },
+                          {
+                            id: client.guilds.get(serverID).id,
+                            deny: ['SEND_MESSAGES']
+                          }
+                        ]).then(async (createdChannel) => {
+                          await Newschannels.create({
+                            serverID: serverID,
+                            channelID: createdChannel.id
+                          })
+                        })
+                      })
                     })
                     return message.author.dmChannel.send("Server succesfully added! You can leave this DM now!")
                   }
