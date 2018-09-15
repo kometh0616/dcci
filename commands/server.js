@@ -71,7 +71,7 @@ exports.run = async (client, message, args) => {
     .setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
     .setColor(message.member.displayColor)
     .setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
-    .setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`)
+    .setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
     async function updateSat() {
       embed.setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
       embed.setColor(message.member.displayColor)
