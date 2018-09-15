@@ -89,14 +89,15 @@ exports.run = async (client, message, args) => {
         if (reaction.emoji.name === '⬅' && curPage !== 1){
           x--;
           curPage--;
-          let embed = new RichEm
-          await updateSat()
+          let embed = new RichEmbed()
+          await updateSat(embed)
           await m.edit({embed})
         }
         else if (reaction.emoji.name === '➡' && curPage !== allPages){
           x++;
           curPage++;
-          await updateSat()
+          let embed = new RichEmbed()
+          await updateSat(embed)
           await m.edit({embed})
         }
         else if (reaction.emoji.name === '❌'){
