@@ -4,7 +4,7 @@ exports.run = async (client, message, args) => {
   const id = args[1]
   if (!id) return
   if (!client.guilds.get(id)) return message.reply('no guild found with defined ID.')
-  if (message.author.id !== client.guilds.get(id).ownerID || !client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+  if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
   const newData = args.slice(2).join(' ')
   if (!newData) return
   const foundServer = await DCCIServers.findOne({where: {guildID: id}}) || await DCCISatellite.findOne({where: {guildID: id}})
