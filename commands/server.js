@@ -72,11 +72,11 @@ exports.run = async (client, message, args) => {
     .setColor(message.member.displayColor)
     .setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
     .setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
-    async function updateSat() {
-      embed.setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
-      embed.setColor(message.member.displayColor)
-      embed.setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
-      embed.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
+    const updateSat = async emb => {
+      emb.setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
+      emb.setColor(message.member.displayColor)
+      emb.setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
+      emb.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
     }
     await message.channel.send({embed}).then(async m => {
       const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id
@@ -89,6 +89,7 @@ exports.run = async (client, message, args) => {
         if (reaction.emoji.name === '⬅' && curPage !== 1){
           x--;
           curPage--;
+          let embed = new RichEm
           await updateSat()
           await m.edit({embed})
         }
