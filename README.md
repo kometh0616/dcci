@@ -9,3 +9,15 @@ Currently, bot is operated by:
 
 DCCI Satellite server can be found [here.](https://discord.gg/bYy6qW5)
 Issues can be reported either via GitHub, or in our DM's.
+
+Config.json structure:
+```
+{
+	"prefix": "",          // bot's prefix goes here
+	"botOwnerID": "",      // ID of a person who maintains the bot. Needed for powerful commands.
+	"logChannelID": "",    // channel, where main, cross0
+  "apiToken": "",
+	"copymark": "",
+	"streamChannelID": ""
+}
+```
