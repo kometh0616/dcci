@@ -262,15 +262,15 @@ exports.run = async (client, message, args) => {
 		case 'info':
 			let id = args[1]
 			client.fetchUser(id).then(async u => {
-				await blacklist.lookup(u.id).then(async res => {
-					if (res.banned === "0" ) return await message.reply('this member is not DBanned!')
+			  blacklist.lookup(u.id).then(async res => {
+					if (res[0].banned === '0') return await message.reply('this member is not DBanned!')
 					let embed = new RichEmbed()
 					.setAuthor(u.tag, u.avatarURL)
 					.setColor(message.member.displayColor)
 					.setTitle('Information on DBanned user')
-					.addField('Case ID:', res.case_id)
-					.addField('Reason:', res.reason)
-					.addField('Evidence (may contain NSFW content):', res.proof)
+					.addField('Case ID:', res[0].case_id)
+					.addField('Reason:', res[0].reason)
+					.addField('Evidence (may contain NSFW content):', res[0].proof)
 					.setTimestamp()
 					.setFooter(`Requested by ${message.author.tag}`, message.author.avatarURL)
 					await message.channel.send({embed})
