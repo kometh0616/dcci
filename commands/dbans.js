@@ -1,6 +1,8 @@
 const Blacklist = require('discordblacklist')
 const { RichEmbed } = require('discord.js')
 exports.run = async (client, message, args) => {
+  return message.channel.send('All DBANS systems are down due to maintenance issues within DBANS API itself. This is not a bot-sided bug, therefore ETA of system recovery is unknown. \nWe apologise for the inconvenience.')
+  /*
 	const blacklist = new Blacklist(client.config.apiToken)
 	let thisServerID = message.guild.id
 	let primeModel = await DBans.findOne({
@@ -284,6 +286,7 @@ exports.run = async (client, message, args) => {
 			})
 			break;
 	}
+  */
 }
 
 exports.help = {
