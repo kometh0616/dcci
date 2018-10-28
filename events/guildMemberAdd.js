@@ -1,4 +1,4 @@
-const discordblacklist = require('discordblacklist');
+const discordblacklist = require('discordblacklist')
 const { RichEmbed } = require('discord.js')
 module.exports = async (client, member) => {
 	const blacklist =  new discordblacklist(client.config.apiToken)
@@ -46,7 +46,7 @@ module.exports = async (client, member) => {
 		}
 	}
 	if (fetchDBansSettings) {
-		if (fetchDBansSettings.get('autoban') === true){
+		if (fetchDBansSettings.get('autoban')){
 			blacklist.lookup(joinedID).then(u => {
 				if (u.banned === '1') member.ban('This user is DBanned.').then(async m => {
 					if (!loggingChannel) return
@@ -67,7 +67,7 @@ module.exports = async (client, member) => {
 				})
 			}).catch(err => console.error(err))
 		}
-		else if (fetchDBansSettings.get('verification') === true) {
+		else if (fetchDBansSettings.get('verification')) {
 			blacklist.lookup(joinedID).then(async u => {
 				if (u.banned === "1") {
 					let verificationRole = await member.guild.roles.get(fetchDBansSettings.get('roleID'))
@@ -93,4 +93,28 @@ module.exports = async (client, member) => {
 			})
 		}
 	}
+	const greenEmoji = client.emojis.get(client.config.greenEmojiID)
+	const greyEmoji = client.emojis.get(client.config.greyEmojiID)
+	const findServer = await DCCIServers.findOne({ where: { guildID: member.guild.id } }) || await DCCISatellite.findOne({ where: { guildID: member.guild.id } })
+	if (!findServer) return
+	const link = await client.fetchInvite(findServer.get('link'))
+	const portals = await Embeds.findAll({ attributes: ['portalID'] }).map(h => h.portalID)
+	portals.forEach(async channelID => {
+		const dat = await Embeds.findOne({
+			where: {
+				portalID: channelID,
+				guildID: member.guild.id,
+			}
+		})
+		if (!dat) return
+		const portal = client.channels.get(channelID)
+		const msg = await portal.fetchMessage(dat.get('messageID'))
+		const embed = new RichEmbed()
+			.addField('Link to the server:', `${findServer.get('link')}\n${greenEmoji} ${link.presenceCount} online ${greyEmoji} ${link.memberCount} members`)
+			.setAuthor(member.guild.name, member.guild.iconURL)
+			.setColor(portal.guild.me.displayColor)
+			.setDescription(findServer.get('description'))
+			.setThumbnail(member.guild.iconURL)
+		await msg.edit({ embed })
+	})
 }

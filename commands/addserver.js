@@ -53,7 +53,7 @@ exports.run = async (client, message, args) => {
       errors: ['time']
     })
     if (['y', 'Yes', 'yes', 'Y'].includes(collected.first().content)) {
-      let botAutoRole = client.guilds.get(serverID).me.roles.find(h => h.name === 'DCCI Beta')
+      let botAutoRole = client.guilds.get(serverID).me.roles.find(h => h.name === 'DCCI')
       const createdChannel = await client.guilds.get(serverID).createChannel('dcci-portal', 'text', [{
         id: botAutoRole.id,
         allow: ['SEND_MESSAGES', 'MANAGE_MESSAGES', 'EMBED_LINKS']
