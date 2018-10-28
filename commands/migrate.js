@@ -94,7 +94,7 @@ exports.run = async (client, message, args) => {
 		})
 
 		const manualMain = await ManualPortals.findAll({ attributes: ['portalChannel'] })
-		const manualMainChannelIDs = manualMain.map(h => portalChannel)
+		const manualMainChannelIDs = manualMain.map(h => h.portalChannel)
 		manualMainChannelIDs.forEach(async cid => {
 			const channel = client.channels.get(cid)
 			guildIDs.forEach(async gid => {
