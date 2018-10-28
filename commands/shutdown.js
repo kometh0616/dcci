@@ -1,5 +1,5 @@
-exports.run = (client, message, args) => {
+exports.run = async (client, message, args) => {
   if (message.author.id !== client.config.botOwnerID) return;
-  message.channel.send('Logging off...')
-  client.destroy()
+  await message.channel.send('Logging off...')
+  await client.destroy()
 }

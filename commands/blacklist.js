@@ -10,7 +10,7 @@ exports.run = async (client, message, args) => {
 	let reasonForBList = args.slice(2).join(" ");
   if (args[1]){
 	let mention = message.mentions.users.first();
-	blacklisted = mention != undefined ? mention.id : args[1]
+	blacklisted = mention !== undefined ? mention.id : args[1]
   	}
 	let checkBList = await Blacklist.findOne({
 		where: {
@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
 	})
 	let blacklister = message.author.tag
 	if (args[0]) {
-		let name = isNaN(args[0]) === true ? args[0].toLowerCase() : undefined
+		let name = isNaN(args[0]) ? args[0].toLowerCase() : undefined
 		let subcommand = client.blacklistSubcommands.get(name)
 		if (!subcommand) return
 		subcommand.run(client, message, args, Discord, thisServerID, fetchBList, blacklisted, reasonForBList, checkBList, blacklister)
@@ -27,7 +27,7 @@ exports.run = async (client, message, args) => {
 		let grabID = await Blacklist.findAll({
 			attributes: ['userID']
 		})
-		var userList = []
+		let userList = []
 		grabID.forEach(async grabbed => {
 			userList.push(grabbed.dataValues.userID)
 		})
@@ -38,16 +38,16 @@ exports.run = async (client, message, args) => {
 		grabTags.forEach(grabbed => {
 			tagList.push(grabbed.dataValues.tag)
 		})
-		var displayedList = []
-		var start = 0;
-		var end = 10
+		let displayedList = []
+		let start = 0;
+		let end = 10
 		for (let index = start; index < end; index++){
-			if (userList[index]){
+			if (userList[index]) {
 				displayedList.push(`${userList[index]} - ${tagList[index]}`)
 			}
 		}
-		var currentPage = 1
-		var allPages = userList.length % 10 === 0 ? userList.length / 10 : Math.floor(userList.length / 10) + 1
+		let currentPage = 1
+		let allPages = userList.length % 10 === 0 ? userList.length / 10 : Math.floor(userList.length / 10) + 1
 		let embed = new Discord.RichEmbed()
 		.setAuthor(message.author.tag, message.author.avatarURL)
 		.setTitle('Blacklisted ID\'s')
@@ -67,7 +67,7 @@ exports.run = async (client, message, args) => {
 					end -= 10
 					displayedList = []
 					for (let index = start; index < end; index++){
-						if (userList[index]){
+						if (userList[index]) {
 							displayedList.push(`${userList[index]} - ${tagList[index]}`)
 						}
 					}
@@ -81,7 +81,7 @@ exports.run = async (client, message, args) => {
 					end += 10
 					displayedList = []
 					for (let index = start; index < end; index++){
-						if (userList[index]){
+						if (userList[index]) {
 							displayedList.push(`${userList[index]} - ${tagList[index]}`)
 						}
 					}
@@ -101,6 +101,7 @@ exports.run = async (client, message, args) => {
 		})
 	}
 }
+
 
 
 exports.help = {

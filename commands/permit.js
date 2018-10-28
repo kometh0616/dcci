@@ -9,13 +9,13 @@ exports.run = async (client, message, args) => {
   })
   if (!check) {
     await Permits.create({guildID: serverID})
-    return await message.reply('server with defined ID is now allowed to use the bot!')
+    await message.reply('server with defined ID is now allowed to use the bot!')
   } else {
     await Permits.destroy({
       where: {
         guildID: serverID
       }
     })
-    return await message.reply('permission to use the bot taken away from the server succesfully!')
+    await message.reply('permission to use the bot taken away from the server succesfully!')
   }
 }

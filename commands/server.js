@@ -1,111 +1,152 @@
 const { RichEmbed } = require('discord.js')
 exports.run = async (client, message, args) => {
-  if (!args[0]){
-		const servers = await DCCIServers.findAll({
-			attributes: ['guildID', 'name', 'description', 'link']
-		})
-		let x = 0
-		let curPage = 1
-		let allPages = servers.length
-		let embed = new RichEmbed()
-		.setAuthor(servers[x].dataValues.name, client.guilds.get(servers[x].dataValues.guildID).iconURL)
-		.setColor(message.member.displayColor)
-		.setDescription(`${servers[x].dataValues.description}\n\n**Link to the server:**\n${servers[x].dataValues.link}`)
-		.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
-		async function updateEmbed(){
-			embed.setAuthor(servers[x].dataValues.name, client.guilds.get(servers[x].dataValues.guildID).iconURL)
-			embed.setColor(message.member.displayColor)
-			embed.setDescription(`${servers[x].dataValues.description}\n\n**Link to the server:**\n${servers[x].dataValues.link}`)
-			embed.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
-		}
-		await message.channel.send({embed}).then(async m => {
-			const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id
-			await m.react('⬅')
-			await m.react('➡')
-			await m.react('❌')
-			const collector = m.createReactionCollector(filter)
-			collector.on('collect', async reaction => {
-				await reaction.remove(message.author.id)
-				if (reaction.emoji.name === '⬅' && curPage !== 1){
-					x--;
-					curPage--;
-					updateEmbed()
-					await m.edit({embed})
-				}
-				else if (reaction.emoji.name === '➡' && curPage !== allPages){
-					x++;
-					curPage++;
-					updateEmbed()
-					await m.edit({embed})
-				}
-				else if (reaction.emoji.name === '❌'){
-					await collector.stop()
-					await m.delete()
-					await message.delete()
-				}
-			})
-		})
-	}
-	else if (args[0] !== '--satellite') {
-		let serverName = args.slice(0).join(" ")
-		let server = await DCCIServers.findOne({
-			where: {
-				name: serverName
-			}
-		})
-		let embed = new RichEmbed()
-		.setAuthor(server.dataValues.name, server.iconURL)
-		.setColor(message.member.displayColor)
-		.setDescription(`${server.dataValues.description}\n\n**Link to the server:**\n${server.dataValues.link}`)
-		.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
-		message.channel.send({embed})
-	}
-  else {
-    const satellites = await DCCISatellite.findAll({
-      attributes: ['guildID', 'name', 'description', 'link']
+  const greenEmoji = client.emojis.get(client.config.greenEmojiID)
+  const greyEmoji = client.emojis.get(client.config.greyEmojiID)
+  if (!args[0]) {
+    const servers = await DCCIServers.findAll({
+      attributes: ['name', 'description', 'guildID', 'link', 'createdAt'],
+      order: client.sequelize.col('createdAt')
     })
-    let x = 0
-    let curPage = 1
-    let allPages = satellites.length
+    const allPages = servers.length
+    let iterator = 0
+    let currentPage = 1
+    let link = await client.fetchInvite(servers[iterator].get('link'))
     let embed = new RichEmbed()
-    .setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
+    .addField('Link to the server:', `${servers[iterator].get('link')}\n${greenEmoji} ${link.presenceCount} online ${greyEmoji} ${link.memberCount} members`)
+    .setAuthor(servers[iterator].get('name'), client.guilds.get(servers[iterator].get('guildID')).iconURL)
     .setColor(message.member.displayColor)
-    .setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
-    .setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
-    const updateSat = async emb => {
-      emb.setAuthor(satellites[x].dataValues.name, client.guilds.get(satellites[x].dataValues.guildID).iconURL)
-      emb.setColor(message.member.displayColor)
-      emb.setDescription(`${satellites[x].dataValues.description}\n\n**Link to the server:**\n${satellites[x].dataValues.link}`)
-      emb.setFooter(`Page ${curPage}/${allPages} | Requested by ${message.author.tag}`, client.user.avatarURL)
+    .setDescription(servers[iterator].get('description'))
+    .setFooter(`${currentPage}/${allPages} pages | Requested by ${message.author.tag}`, message.author.avatarURL)
+    .setThumbnail(client.guilds.get(servers[iterator].get('guildID')).iconURL)
+    const updateEmbed = async () => {
+      return new Promise(async (resolve, reject) => {
+        let link = await client.fetchInvite(servers[iterator].get('link'))
+        let embed = new RichEmbed()
+        .addField('Link to the server:', `${servers[iterator].get('link')}\n${greenEmoji} ${link.presenceCount} online ${greyEmoji} ${link.memberCount} members`)
+        .setAuthor(servers[iterator].get('name'), client.guilds.get(servers[iterator].get('guildID')).iconURL)
+        .setColor(message.member.displayColor)
+        .setDescription(servers[iterator].get('description'))
+        .setFooter(`${currentPage}/${allPages} pages | Requested by ${message.author.tag}`, message.author.avatarURL)
+        .setThumbnail(client.guilds.get(servers[iterator].get('guildID')).iconURL)
+        resolve(embed)
+        reject(new Error('Failed to create an embed.'))
+      });
     }
-    await message.channel.send({embed}).then(async m => {
-      const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id
-      await m.react('⬅')
-      await m.react('➡')
-      await m.react('❌')
-      const collector = m.createReactionCollector(filter)
-      collector.on('collect', async reaction => {
-        await reaction.remove(message.author.id)
-        if (reaction.emoji.name === '⬅' && curPage !== 1){
-          x--;
-          curPage--;
-          let embed = new RichEmbed()
-          await updateSat(embed)
-          await m.edit({embed})
+    const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id
+    const msg = await message.channel.send({embed})
+    await msg.react('⬅')
+    await msg.react('➡')
+    await msg.react('❌')
+    const collector = msg.createReactionCollector(filter, {
+      time: 600000
+    })
+    collector.on('collect', async reaction => {
+      await reaction.remove(message.author.id)
+      if (reaction.emoji.name === '⬅' && currentPage != 1) {
+        try {
+          iterator--
+          currentPage--
+          let newEmbed = await updateEmbed()
+          await msg.edit({embed: newEmbed})
+        } catch (e) {
+          console.error(e)
+          await msg.edit('Something went wrong. Please contact a developer!')
         }
-        else if (reaction.emoji.name === '➡' && curPage !== allPages){
-          x++;
-          curPage++;
-          let embed = new RichEmbed()
-          await updateSat(embed)
-          await m.edit({embed})
+      }
+      else if (reaction.emoji.name === '➡' && currentPage !== allPages) {
+        try {
+          iterator++
+          currentPage++
+          let newEmbed = await updateEmbed()
+          await msg.edit({embed: newEmbed})
+        } catch (e) {
+          console.error(e)
+          await msg.edit('Something went wrong. Please contact a developer!')
         }
-        else if (reaction.emoji.name === '❌'){
+      }
+      else if (reaction.emoji.name === '❌') {
+        try {
           await collector.stop()
-          await m.delete()
+          await msg.delete()
           await message.delete()
+        } catch (e) {
+          console.error(e)
+          await msg.edit('Something went wrong. Please contact a developer!')
         }
-      })
+      }
+    })
+  } else if (args[0] === '--satellite') {
+    const servers = await DCCISatellite.findAll({
+      attributes: ['name', 'description', 'guildID', 'link', 'createdAt'],
+      order: client.sequelize.col('createdAt')
+    })
+    const allPages = servers.length
+    let iterator = 0
+    let currentPage = 1
+    let link = await client.fetchInvite(servers[iterator].get('link'))
+    let embed = new RichEmbed()
+    .addField('Link to the server:', `${servers[iterator].get('link')}\n${greenEmoji} ${link.presenceCount} online ${greyEmoji} ${link.memberCount} members`)
+    .setAuthor(servers[iterator].get('name'), client.guilds.get(servers[iterator].get('guildID')).iconURL)
+    .setColor(message.member.displayColor)
+    .setDescription(servers[iterator].get('description'))
+    .setFooter(`${currentPage}/${allPages} pages | Requested by ${message.author.tag}`, message.author.avatarURL)
+    .setThumbnail(client.guilds.get(servers[iterator].get('guildID')).iconURL)
+    const updateEmbed = async () => {
+      return new Promise(async (resolve, reject) => {
+        let link = await client.fetchInvite(servers[iterator].get('link'))
+        let embed = new RichEmbed()
+        .addField('Link to the server:', `${servers[iterator].get('link')}\n${greenEmoji} ${link.presenceCount} online ${greyEmoji} ${link.memberCount} members`)
+        .setAuthor(servers[iterator].get('name'), client.guilds.get(servers[iterator].get('guildID')).iconURL)
+        .setColor(message.member.displayColor)
+        .setDescription(servers[iterator].get('description'))
+        .setFooter(`${currentPage}/${allPages} pages | Requested by ${message.author.tag}`, message.author.avatarURL)
+        .setThumbnail(client.guilds.get(servers[iterator].get('guildID')).iconURL)
+        resolve(embed)
+        reject(new Error('Failed to create an embed.'))
+      });
+    }
+    const filter = (reaction, user) => ['⬅', '➡', '❌'].includes(reaction.emoji.name) && user.id === message.author.id
+    const msg = await message.channel.send({embed})
+    await msg.react('⬅')
+    await msg.react('➡')
+    await msg.react('❌')
+    const collector = msg.createReactionCollector(filter, {
+      time: 600000
+    })
+    collector.on('collect', async reaction => {
+      await reaction.remove(message.author.id)
+      if (reaction.emoji.name === '⬅' && currentPage != 1) {
+        try {
+          iterator--
+          currentPage--
+          let newEmbed = await updateEmbed()
+          await msg.edit({embed: newEmbed})
+        } catch (e) {
+          console.error(e)
+          await msg.edit('Something went wrong. Please contact a developer!')
+        }
+      }
+      else if (reaction.emoji.name === '➡' && currentPage !== allPages) {
+        try {
+          iterator++
+          currentPage++
+          let newEmbed = await updateEmbed()
+          await msg.edit({embed: newEmbed})
+        } catch (e) {
+          console.error(e)
+          await msg.edit('Something went wrong. Please contact a developer!')
+        }
+      }
+      else if (reaction.emoji.name === '❌') {
+        try {
+          await collector.stop()
+          await msg.delete()
+          await message.delete()
+        } catch (e) {
+          console.error(e)
+          await msg.edit('Something went wrong. Please contact a developer!')
+        }
+      }
     })
   }
 }
