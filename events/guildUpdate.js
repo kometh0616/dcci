@@ -18,7 +18,7 @@ module.exports = async (client, oldGuild, newGuild) => {
       let embed = new RichEmbed()
       .addField(`Link to the server:`, `${isInDCCI.get('link')}\n${greenEmoji} ${inv.presenceCount} online ${greyEmoji} ${inv.memberCount} members`)
       .setAuthor(newGuild.name, newGuild.iconURL)
-      .setColor(newGuild.me.displayColor)
+      .setColor(msg.guild.me.displayColor)
       .setDescription(isInDCCI.get('description'))
       .setThumbnail(newGuild.iconURL)
       await msg.edit({embed})
