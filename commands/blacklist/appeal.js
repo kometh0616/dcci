@@ -66,7 +66,8 @@ exports.run = async (client, message) => {
 			await m.react('❌')
 			await dmChannel.send('Your appeal has been sent to our server! We will reach '
 				+ 'you out once we will take a decision on your appeal.')
-			const collector = await m.createReactionCollector(reactFilter, {
+      const emojiFilter = reaction => ['✅', '❌'].includes(reaction.emoji.name)
+			const collector = await m.createReactionCollector(emojiFilter, {
 				time: 172800000,
 			})
 			collector.on('collect', async reaction => {
