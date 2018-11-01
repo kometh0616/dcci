@@ -26,6 +26,7 @@ exports.run = async (client, message, args) => {
 						guildID: message.guild.id
 					}
 				})
+        if (!browse) return
 				let logChannel = message.guild.channels.get(browse.get('channelID'))
 				logChannel.send({embed})
 			})
@@ -56,6 +57,7 @@ exports.run = async (client, message, args) => {
 					guildID: message.guild.id
 				}
 			})
+      if (!browse) return
 			let logChannel = message.guild.channels.get(browse.get('channelID'))
 			logChannel.send({embed})
 		})
