@@ -14,6 +14,7 @@ module.exports = async (client, oldGuild, newGuild) => {
           guildID: newGuild.id
         }
       })
+      if (!emb) return
       const msg = await client.channels.get(portal).fetchMessage(emb.get('messageID'))
       let embed = new RichEmbed()
       .addField(`Link to the server:`, `${isInDCCI.get('link')}\n${greenEmoji} ${inv.presenceCount} online ${greyEmoji} ${inv.memberCount} members`)
