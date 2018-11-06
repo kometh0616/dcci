@@ -1,7 +1,7 @@
 exports.run = (client, message, args) => {
   if (message.author.id !== client.config.botOwnerID) {
     const num = Math.floor(Math.random() * 100) + 1
-    if (num < 10)
+    if (num > 10)
       return message.channel.send({
         files: ['https://cdn.discordapp.com/attachments/354515583464898572/469992679435010048/SOD_OFF.png']
       })
