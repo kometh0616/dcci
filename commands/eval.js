@@ -1,8 +1,14 @@
 exports.run = (client, message, args) => {
   if (message.author.id !== client.config.botOwnerID) {
-    return message.channel.send({
-      files: ['https://cdn.discordapp.com/attachments/354515583464898572/469992679435010048/SOD_OFF.png']
-    }) 
+    const num = Math.floor(Math.random() * 100) + 1
+    if (num < 10)
+      return message.channel.send({
+        files: ['https://cdn.discordapp.com/attachments/354515583464898572/469992679435010048/SOD_OFF.png']
+      })
+    else
+      return message.channel.send({
+        files: ['https://cdn.discordapp.com/attachments/354515583464898572/494189773615792129/SOD_OFF_Deep_Fried.png']
+      })
   }
   const argument = message.content.split(" ").slice(1)
 	const clean = text => {
