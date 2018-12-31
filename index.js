@@ -72,6 +72,6 @@ fs.readdir("./models/", (err, files) => {
 	})
 })
 
-process.on('unhandledRejection', err => console.error(err))
+process.on('unhandledRejection', console.error)
 
 client.login(process.env.TOKEN)
