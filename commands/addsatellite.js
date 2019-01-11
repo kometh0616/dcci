@@ -1,6 +1,7 @@
 const { RichEmbed } = require('discord.js')
 exports.run = async (client, message, args) => {
-  if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+  if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')
+     && !client.guilds.get("452631886691434496").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
   const filter = m => m.author.id === message.author.id
   let serverID
   let serverName
