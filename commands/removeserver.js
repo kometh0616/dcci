@@ -1,5 +1,6 @@
 exports.run = async (client, message, args) => {
-  if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
+  if (!client.guilds.get("320659280686743602").members.get(message.author.id).hasPermission('ADMINISTRATOR')
+     && !client.guilds.get("452631886691434496").members.get(message.author.id).hasPermission('ADMINISTRATOR')) return
   let logChannel = client.channels.get(client.config.logChannelID)
   let serverID = args[0]
   if (!serverID){
