@@ -13,7 +13,7 @@
     "discord.js": "^11.5.1",
     "discordblacklist": "^3.2.0",
     "express": "^4.17.1",
-    "sequelize": "^4.44.0",
+    "sequelize": "^5.15.1",
     "sqlite3": "^4.0.9"
   },
   "engines": {
