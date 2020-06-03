@@ -20,3 +20,10 @@ exports.run = async (client, message, args) => {
     await message.reply('permission to use the bot taken away from the server succesfully!')
   }
 }
+
+exports.help = {
+  name: 'permit',
+  description: 'Allows a server to use the bot. Can only be ran by DCCI admins.',
+  subcommands: 'none',
+  usage: '>permit <server ID>'
+}
